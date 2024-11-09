@@ -32,7 +32,7 @@ pipeline {
                 sshagent(['frontend']) { 
                     sh """
                         ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "if lsof -ti:3000 > /dev/null; then kill -9 \$(lsof -ti:3000); fi; rm -rf ${env.REMOTE_PATH}/*"
-                        scp -o StrictHostKeyChecking=no dist/ "${env.REMOTE_USER}"@"${env.REMOTE_HOST}":"${env.REMOTE_PATH}"
+                        scp -o StrictHostKeyChecking=no -r dist/ "${env.REMOTE_USER}"@"${env.REMOTE_HOST}":"${env.REMOTE_PATH}"
                         ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" 'cd ${env.REMOTE_PATH} && screen -d -m serve -s dist/'
                         """
                 }
