@@ -3,7 +3,6 @@ pipeline {
     environment {
         REPO_URL = "https://github.com/Fredericsonn/sirius-front.git"
         REMOTE_USER = "eco"
-        REMOTE_HOST = "172.31.253.53"
         REMOTE_PATH = "/home/eco/app"
     }
     stages {
