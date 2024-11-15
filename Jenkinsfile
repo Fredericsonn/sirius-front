@@ -19,6 +19,7 @@ pipeline {
             agent { 
                 docker { 
                     image 'ecotracer/front-agent' 
+                    args '--restart always'
                 } 
             }
             steps {
