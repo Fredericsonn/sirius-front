@@ -1,5 +1,5 @@
 pipeline {
-    agent none  
+    agent none
     environment {
         REPO_URL = "https://github.com/Fredericsonn/sirius-front.git"
         REMOTE_USER = "eco"
@@ -9,43 +9,51 @@ pipeline {
             agent { 
                 docker { 
                     image 'ecotracer/front-agent' 
+                    args '--user root' 
                 } 
             }
             steps {
                 git branch: "master", url: "${env.REPO_URL}"
             }
         }
+        
         stage("Build") {
             agent { 
                 docker { 
                     image 'ecotracer/front-agent' 
-                    args '--restart always'
+                    args '--user root' 
                 } 
             }
             steps {
                 script {    
                     sh '''
-                        npm install
+                        rm -rf node_modules package-lock.json
+                        npm cache clean --force
+                        npm install --no-optional 
+                        npm install rollup --save-dev
                         npm run build 
                     '''
                 }
             }
         }
+        
         stage("Archive artifact") {
             agent { 
                 docker { 
                     image 'ecotracer/front-agent' 
+                    args '--user root' 
                 } 
             }   
             steps {
-                archiveArtifacts artifacts: "dist/,Dockerfile", allowEmptyArchive: false
+                archiveArtifacts artifacts: "dist,Dockerfile", allowEmptyArchive: false
             }
         }
+        
         stage("Building Docker Image") {
             agent { 
                 docker { 
                     image 'ecotracer/dind' 
-                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""'
+                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""' 
                 } 
             }
             steps {
@@ -71,11 +79,12 @@ pipeline {
                 }
             }
         }
+        
         stage("Deploy to the front server") {
             agent { 
                 docker { 
                     image 'ecotracer/dind' 
-                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""'
+                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""' 
                 } 
             }
             steps {
@@ -88,6 +97,7 @@ pipeline {
             }
         }
     }
+    
     post {
         success {
             echo 'Deployment completed successfully!'
