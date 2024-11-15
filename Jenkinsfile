@@ -1,44 +1,91 @@
 pipeline {
-    agent { dockerContainer { image 'ecotracer/front' } }
+    agent none  
     environment {
         REPO_URL = "https://github.com/Fredericsonn/sirius-front.git"
         REMOTE_USER = "eco"
-        REMOTE_PATH = "/home/eco/app"
     }
     stages {
         stage('Cloning the repository') {
+            agent { 
+                docker { 
+                    image 'ecotracer/front-agent' 
+                } 
+            }
             steps {
-                git branch : "master", url: "${env.REPO_URL}"
+                git branch: "master", url: "${env.REPO_URL}"
             }
         }
         stage("Build") {
+            agent { 
+                docker { 
+                    image 'ecotracer/front-agent' 
+                } 
+            }
             steps {
                 script {    
                     sh '''
                         npm install
-			npm run build
+                        npm run build 
                     '''
                 }
             }
         }
         stage("Archive artifact") {
+            agent { 
+                docker { 
+                    image 'ecotracer/front-agent' 
+                } 
+            }   
             steps {
-                archiveArtifacts artifacts : "dist/*", allowEmptyArchive: false
+                archiveArtifacts artifacts: "dist/,Dockerfile", allowEmptyArchive: false
             }
         }
-        stage("Deploy to the front server") {
+        stage("Building Docker Image") {
+            agent { 
+                docker { 
+                    image 'ecotracer/dind' 
+                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""'
+                } 
+            }
             steps {
-                sshagent(['frontend']) { 
-                    sh """
-                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "lsof -ti:3000 | xargs -r kill -9; rm -rf ${env.REMOTE_PATH}/*"
-                        scp -o StrictHostKeyChecking=no -r dist/ "${env.REMOTE_USER}"@"${env.REMOTE_HOST}":"${env.REMOTE_PATH}"
-                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" 'cd ${env.REMOTE_PATH} && screen -dmS react serve -s dist/'
-                        """
+                script {
+                    sh 'docker build -t ${IMAGE_NAME} .'
                 }
-                
             }
         }
 
+        stage("Pushing Image to DockerHub") {
+            agent { 
+                docker { 
+                    image 'ecotracer/dind' 
+                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""' 
+                } 
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh '''
+                        docker login -u $USERNAME -p $PASSWORD
+                        docker push ${IMAGE_NAME}
+                    '''
+                }
+            }
+        }
+        stage("Deploy to the front server") {
+            agent { 
+                docker { 
+                    image 'ecotracer/dind' 
+                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""'
+                } 
+            }
+            steps {
+                sshagent(['frontend']) { 
+                    sh """
+                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "lsof -ti:3000 | xargs -r kill -9; docker rm -f frontend"
+                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker rmi -f ${IMAGE_NAME} && docker run -d --name frontend -p 3000:3000 -e API=${API} ${IMAGE_NAME}"
+                    """
+                }
+            }
+        }
     }
     post {
         success {
