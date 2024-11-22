@@ -58,12 +58,12 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'docker build -t ${IMAGE_NAME} .'
+                    sh 'docker build -t ${REGISTRY_URL}/${IMAGE_NAME} .'
                 }
             }
         }
 
-        stage("Pushing Image to DockerHub") {
+        stage("Pushing Image to the registry") {
             agent { 
                 docker { 
                     image 'ecotracer/dind' 
@@ -71,10 +71,10 @@ pipeline {
                 } 
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'registry', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''
-                        docker login -u $USERNAME -p $PASSWORD
-                        docker push ${IMAGE_NAME}
+                        docker login ${REGISTRY_URL} -u $USERNAME -p $PASSWORD
+                        docker push ${REGISTRY_URL}/${IMAGE_NAME}
                     '''
                 }
             }
@@ -90,8 +90,8 @@ pipeline {
             steps {
                 sshagent(['frontend']) { 
                     sh """
-                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "lsof -ti:3000 | xargs -r kill -9; docker rm -f frontend"
-                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker rmi -f ${IMAGE_NAME} && docker run -d --name frontend -p 3000:3000 -e API=${API} ${IMAGE_NAME}"
+                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker stop frontend || true && docker rm frontend || true"
+                        ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker rmi -f ${REGISTRY_URL}/${IMAGE_NAME} && docker run -d --name frontend --network host -e API=${API} ${REGISTRY_URL}/${IMAGE_NAME}"
                     """
                 }
             }
