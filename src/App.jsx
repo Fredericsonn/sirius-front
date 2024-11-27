@@ -1,5 +1,5 @@
 import {createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Home, Register, Users } from "./pages";
+import { Home, Register, Users, Error } from "./pages";
 import { action as registerAction } from "./pages/Register";
 import { loader as usersLoader } from "./pages/Users";
 
@@ -17,7 +17,8 @@ const router = createBrowserRouter([
   {
     path: '/users',
     element: <Users />,
-    loader: usersLoader
+    loader: usersLoader,
+    errorElement: <Error />
   }
 ])
 const App = () => {
