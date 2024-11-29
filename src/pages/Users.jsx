@@ -33,7 +33,14 @@ const Users = () => {
                 </div>
 
             ) : (
-                <h1 className='text-center text-4xl italic mt-8'>We don't have any users for the moment</h1>
+                <>
+                    <h1 className='text-center text-4xl italic mt-8'>We don't have any users for the moment</h1>
+                    <div className='flex justify-center w-full mt-4'>
+                        <Link to="/" className='btn btn-secondary uppercase'>go home</Link>
+                    </div>
+                </>
+
+
             )}
         </section>
     );

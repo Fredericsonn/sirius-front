@@ -8,7 +8,7 @@ const Home = () => {
             <Logo />
             <div className='flex justify-center items-center gap-3'>
                 <Link to="/register" className='btn btn-primary font-semibold'>Create a new Account</Link>
-                <Link to="/users" className='btn btn-secondary font-semibold'>Users List</Link>
+                <Link to="/users" className='btn btn-secondary font-semibold'>Users</Link>
             </div>
         </div>
     )
