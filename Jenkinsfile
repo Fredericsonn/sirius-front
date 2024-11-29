@@ -13,7 +13,7 @@ pipeline {
                 } 
             }
             steps {
-                git branch: "master", url: "${env.REPO_URL}"
+                git branch: "${BRANCH}", url: "${env.REPO_URL}"
             }
         }
         
@@ -27,6 +27,7 @@ pipeline {
             steps {
                 script {    
                     sh '''
+                        echo "VITE_API=${API}" > .env
                         rm -rf node_modules package-lock.json
                         npm cache clean --force
                         npm install --no-optional 
