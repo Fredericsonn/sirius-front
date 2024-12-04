@@ -89,7 +89,7 @@ pipeline {
                 } 
             }
             steps {
-                sshagent(['frontend']) { 
+                sshagent(['creds']) { 
                     sh """
                         ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker stop frontend || true && docker rm frontend || true"
                         ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker rmi -f ${REGISTRY_URL}/${IMAGE_NAME} && docker run -d --name frontend --network host -e API=${API} ${REGISTRY_URL}/${IMAGE_NAME}"
