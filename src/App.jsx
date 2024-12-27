@@ -1,24 +1,51 @@
 import {createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Home, Register, Users, Error } from "./pages";
+import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile } from "./pages";
+import { ErrorElement } from "./components";
+
+// Actions
 import { action as registerAction } from "./pages/Register";
-import { loader as usersLoader } from "./pages/Users";
+import { action as loginAction } from "./pages/Login";
 
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />
+    element: <HomeLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        index: true,
+        element: <Landing />,
+        errorElement: <ErrorElement />
+      },
+      {
+        path: '/about',
+        element: <About />,
+        errorElement: <ErrorElement />
+      },
+      {
+        path: '/tracer',
+        element: <Tracer />,
+        errorElement: <ErrorElement />
+      },
+      {
+        path: '/profile',
+        element: <Profile />,
+        errorElement: <ErrorElement />
+      }
+    ]
   },
   {
     path: '/register',
     element: <Register />,
+    errorElement: <ErrorElement />,
     action: registerAction
   },
   {
-    path: '/users',
-    element: <Users />,
-    loader: usersLoader,
-    errorElement: <Error />
+    path: '/login',
+    element: <Login />,
+    errorElement: <ErrorElement />,
+    action: loginAction
   }
 ])
 const App = () => {
