@@ -1,6 +1,9 @@
 import {createBrowserRouter, RouterProvider } from "react-router-dom";
-import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile } from "./pages";
+import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog } from "./pages";
 import { ErrorElement } from "./components";
+
+// Loaders
+import { loader as catalogLoader } from "./pages/Catalog";
 
 // Actions
 import { action as registerAction } from "./pages/Register";
@@ -32,6 +35,12 @@ const router = createBrowserRouter([
         path: '/profile',
         element: <Profile />,
         errorElement: <ErrorElement />
+      },
+      {
+        path: '/catalog',
+        element: <Catalog />,
+        errorElement: <ErrorElement />,
+        loader: catalogLoader
       }
     ]
   },
