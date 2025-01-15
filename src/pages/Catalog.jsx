@@ -7,6 +7,7 @@ export const loader = async () => {
     const response = await spring.get('/machines');
     const data = response.data;
     const machines = data.vehicles.concat(data.devices);
+       
     return machines;
 }
 

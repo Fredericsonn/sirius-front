@@ -33,7 +33,7 @@ const CatalogElement = ({ element }) => {
   const setMachines = useContext(CatalogContext);
 
   const getMachinesByCategory = async (category) => {
-
+    
     const response = await spring.get('/machines/' + category);
     const machines = response.data;
     setMachines(machines);
