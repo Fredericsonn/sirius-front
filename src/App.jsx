@@ -1,13 +1,15 @@
-import {createBrowserRouter, RouterProvider } from "react-router-dom";
-import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog } from "./pages";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Consumptions } from "./pages";
 import { ErrorElement } from "./components";
 
 // Loaders
 import { loader as catalogLoader } from "./pages/Catalog";
+import { loader as collectionsLoader } from "./pages/Collections";
 
 // Actions
 import { action as registerAction } from "./pages/Register";
 import { action as loginAction } from "./pages/Login";
+import Collection from "./pages/Collection";
 
 
 const router = createBrowserRouter([
@@ -29,6 +31,22 @@ const router = createBrowserRouter([
       {
         path: '/tracer',
         element: <Tracer />,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: '/tracer/collections',
+        element: <Collections />,
+        errorElement: <ErrorElement />,
+        loader: collectionsLoader
+      },
+      {
+        path: "/tracer/collections/:id",
+        element: <Collection />,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: '/tracer/consumptions',
+        element: <Consumptions />,
         errorElement: <ErrorElement />
       },
       {
