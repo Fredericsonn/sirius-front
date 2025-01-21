@@ -11,6 +11,8 @@ import { action as registerAction } from "./pages/Register";
 import { action as loginAction } from "./pages/Login";
 import Collection from "./pages/Collection";
 
+import { store } from "./store";
+
 
 const router = createBrowserRouter([
   {
@@ -72,7 +74,7 @@ const router = createBrowserRouter([
     path: '/login',
     element: <Login />,
     errorElement: <ErrorElement />,
-    action: loginAction
+    action: loginAction(store)
   }
 ])
 const App = () => {

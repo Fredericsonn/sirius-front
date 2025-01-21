@@ -3,10 +3,14 @@ import { FaBarsStaggered } from 'react-icons/fa6';
 import { BsSunFill, BsMoonFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom'
 import NavLinks from './NavLinks'
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../features/user/userSlice';
 
 const NavBar = () => {
-    const isLoggedIn = true;
-
+    const user = useSelector((state) => state.userState.user);
+    const isLoggedIn = user != null;
+    const dispatch = useDispatch();
+    
     return (
         <nav className="navbar bg-base-300 rounded-box mt-4 container-layout flex">
             <div className="navbar-start max-sm:hidden">
@@ -42,7 +46,7 @@ const NavBar = () => {
                                     tabIndex={0}
                                     className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                                     <li><Link to='/profile'>Profile</Link></li>
-                                    <li><button>Logout</button></li>
+                                    <li><button onClick={() => dispatch(logout())}>Logout</button></li>
                                 </ul>
                             </div>
                         </div>
@@ -63,7 +67,6 @@ const NavBar = () => {
 const LoginNav = () => {
     return (
         <div className='flex gap-x-4'>
-            <Link to='/register' className='btn btn-outline btn-primary btn-sm uppercase'>register</Link>
             <Link to='/login' className='btn btn-outline btn-secondary btn-sm uppercase'>Log in</Link>
         </div>
     )
