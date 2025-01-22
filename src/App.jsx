@@ -2,6 +2,7 @@ import {createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Home, Register, Users, Error } from "./pages";
 import { action as registerAction } from "./pages/Register";
 import { loader as usersLoader } from "./pages/Users";
+import Resource from "./pages/Resource";
 
 
 const router = createBrowserRouter([
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
     element: <Users />,
     loader: usersLoader,
     errorElement: <Error />
+  },
+  {
+    path: '/khalil',
+    element: <Resource />
   }
 ])
 const App = () => {
