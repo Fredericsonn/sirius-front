@@ -5,6 +5,7 @@ import { ErrorElement } from "./components";
 // Loaders
 import { loader as catalogLoader } from "./pages/Catalog";
 import { loader as collectionsLoader } from "./pages/Collections";
+import { loader as collectionLoader } from "./pages/Collection";
 
 // Actions
 import { action as registerAction } from "./pages/Register";
@@ -39,12 +40,13 @@ const router = createBrowserRouter([
         path: '/tracer/collections',
         element: <Collections />,
         errorElement: <ErrorElement />,
-        loader: collectionsLoader
+        loader: collectionsLoader(store)
       },
       {
-        path: "/tracer/collections/:id",
+        path: "/tracer/collections/:name",
         element: <Collection />,
         errorElement: <ErrorElement />,
+        loader: collectionLoader(store)
       },
       {
         path: '/tracer/consumptions',

@@ -10,3 +10,4 @@ export {default as MachinesContainer} from "./MachinesContainer";
 export {default as Machine} from "./Machine";
 export {default as CollectionsContainer} from "./CollectionsContainer";
 export {default as CollectionItem} from "./CollectionItem";
+export {default as CreateNewCollection} from "./CreateNewCollection";

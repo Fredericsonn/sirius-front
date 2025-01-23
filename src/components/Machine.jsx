@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 
 const Machine = ({ machine, size }) => {
     const { img, name } = machine;
+    console.log(img);
+    
 
     return (
-        <div className='card w-52 justify-center items-center bg-base-300 shadow-xl hover:shadow-2xl hover:scale-105 transition duration-300 cursor-pointer' 
-             onMouseOver={() => setIsHidden(false)} onMouseOut={() => setIsHidden(true)}>
+        <div className='card w-52 justify-center items-center bg-base-300 shadow-xl hover:shadow-2xl hover:scale-105 transition duration-300 cursor-pointer'>
             <figure className="px-4 pt-4">
                 <img src={img ? img : "/images/machine.png"} alt={name} className={`rounded-xl h-64 md:h-48 w-full object-contain ${size}`}></img>
             </figure>

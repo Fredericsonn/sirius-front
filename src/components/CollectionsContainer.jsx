@@ -4,8 +4,11 @@ import AddNew from './AddNew';
 
 const CollectionsContainer = ({collections}) => {
     return (
-        <div className='flex justify-around flex-wrap gap-y-5 mt-6'>
-            {collections.map((collection) => <CollectionItem id={1} img="/images/machine.png" name="kicthen" machinesNumber={10}/>)}
+        <div className='flex gap-6 items-center flex-wrap gap-y-5 mt-6'>
+            {collections.map((collection) => {        
+                const {id, name, machines} = collection;
+                return <CollectionItem key={id} id={id} img="/images/machine.png" name={name} machinesNumber={machines.length}/>;
+            })}
             <AddNew text="collection"/>
         </div>
     )
