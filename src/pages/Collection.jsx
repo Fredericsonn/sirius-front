@@ -1,7 +1,7 @@
 import React from 'react';
 import { spring } from '../util'
 import { useLoaderData } from 'react-router-dom';
-import { CatalogHeader, CreateNewCollection, MachinesContainer } from '../components';
+import { CatalogHeader, AddNewMachine, MachinesContainer } from '../components';
 import { useState } from 'react';
 
 export const loader = (store) => async ({params}) => {
@@ -23,6 +23,7 @@ const Collection = () => {
       <h1 className='sectionTitle'>{name} collection</h1>
       <CatalogHeader />
       <MachinesContainer machines={data}/>
+      <AddNewMachine />
     </main>
   )
 }

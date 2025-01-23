@@ -2,6 +2,8 @@ import React from 'react'
 import { useLoaderData } from 'react-router-dom';
 import { CollectionsContainer, CreateNewCollection  } from '../components';
 import { spring } from '../util';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const loader = (store) => async () => {
     const user = store.getState().userState.user;
@@ -12,6 +14,22 @@ export const loader = (store) => async () => {
 
 export const action = (store) => async ({request}) => {
     const user = store.getState().userState.user;
+    const formData = await request.formData();
+    const name = Object.fromEntries(formData).name;
+
+    const data = {name, user, machines:[]}
+
+    try {
+        const response = await spring.post('/users/collections/post', data);
+        const {msg, collection} = response.data;
+        toast.success('collection created successfully', {autoClose: 1000});
+        return {msg, collection}
+    } catch (error) {
+        const errorMesssage = error?.response?.data?.error?.message || 'please double check your credentials';
+        toast.error(errorMesssage);
+        return null;
+    }
+
 }
 const Collections = () => {
     const collections = useLoaderData();

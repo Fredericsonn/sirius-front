@@ -1,5 +1,6 @@
 import React from 'react'
 import Machine from './Machine';
+import AddNew from './AddNew';
 
 const MachinesContainer = ({machines}) => {
   return (
@@ -7,6 +8,7 @@ const MachinesContainer = ({machines}) => {
         {machines.map((machine) => {
             return <Machine key={machine.name} machine={machine}/>
         })}
+        <AddNew text="machine" id="addMachineModal"/>
     </section>
   )
 };

@@ -7,7 +7,7 @@ const CreateNewCollection = () => {
       <div className="modal-box">
         <h3 className="font-bold text-lg">Create New Collection</h3>
         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-          onClick={() => document.getElementById('addCollectionModal').close()}>✕</button>
+          onClick={() => document.getElementById('addNewCollectionModal').close()}>✕</button>
         <Form method="POST" className='mt-2'>
           <label className='flex-col items-center gap-3'>
             <span className='label-text capitalize'>name</span>
@@ -27,7 +27,6 @@ const CreateNewCollection = () => {
         </Form>
       </div>
     </dialog>
-
   )
 }
 

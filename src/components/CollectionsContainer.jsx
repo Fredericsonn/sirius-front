@@ -9,7 +9,7 @@ const CollectionsContainer = ({collections}) => {
                 const {id, name, machines} = collection;
                 return <CollectionItem key={id} id={id} img="/images/machine.png" name={name} machinesNumber={machines.length}/>;
             })}
-            <AddNew text="collection"/>
+            <AddNew text="collection" id='addNewCollectionModal'/>
         </div>
     )
 }

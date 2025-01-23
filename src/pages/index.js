@@ -8,4 +8,5 @@ export {default as About} from "./About";
 export {default as Tracer} from "./Tracer";
 export {default as Catalog} from "./Catalog";
 export {default as Collections} from "./Collections";
+export {default as Collection} from "./Collection";
 export {default as Consumptions} from "./Consumptions";
