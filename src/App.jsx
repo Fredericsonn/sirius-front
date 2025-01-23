@@ -1,7 +1,7 @@
-<<<<<<< HEAD
+
 import {createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Home, Register, Users, Error, MachineList } from "./pages";
-=======
+
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Consumptions } from "./pages";
 import { ErrorElement } from "./components";
@@ -12,7 +12,7 @@ import { loader as collectionsLoader } from "./pages/Collections";
 import { loader as collectionLoader } from "./pages/Collection";
 
 // Actions
->>>>>>> ec138d07e4457c2aeb8b8b6b312b7e0d501d065e
+
 import { action as registerAction } from "./pages/Register";
 import { action as loginAction } from "./pages/Login";
 import Collection from "./pages/Collection";
