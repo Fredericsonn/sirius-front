@@ -22,7 +22,7 @@ export const action = (store) => async ({request}) => {
     try {
         const response = await spring.post('/users/collections/post', data);
         const {msg, collection} = response.data;
-        toast.success('collection created successfully', {autoClose: 1000});
+        toast.success('collection created successfully', {autoClose: 1500});
         return {msg, collection}
     } catch (error) {
         const errorMesssage = error?.response?.data?.error?.message || 'please double check your credentials';

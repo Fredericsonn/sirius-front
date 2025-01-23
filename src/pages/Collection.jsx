@@ -9,21 +9,20 @@ export const loader = (store) => async ({params}) => {
   const userId = store.getState().userState.user.id;
   
   const response = await spring.get('/users/collections/' + name, {params: {userId}});
-  const machines = response.data.machines;
+  const {machines, id} = response.data;
   machines.map((m) => m.img = '/' + m.img);
 
-  return {name, machines};
+  return {id, name, machines};
 }
 const Collection = () => {
-  const {name, machines} = useLoaderData();
+  const {id, name, machines} = useLoaderData();
   const [data, setData] = useState(machines);
-  
+
   return (
     <main>
-      <h1 className='sectionTitle'>{name} collection</h1>
-      <CatalogHeader />
-      <MachinesContainer machines={data}/>
-      <AddNewMachine />
+      <h1 className='sectionTitle mb-8'>{name} collection</h1>
+      <MachinesContainer machines={data} isAdd={true} />
+      <AddNewMachine collectionId={id} existingMachines={data} collectionName={name}  />
     </main>
   )
 }
