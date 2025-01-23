@@ -10,7 +10,7 @@
       @apply border-4 border-red-700;
     }
     .sectionTitle {
-      @apply text-2xl font-semibold italic tracking-wide border-b-2 border-primary pb-[2px] mb-4;
+      @apply text-2xl font-semibold italic tracking-wide border-b-2 border-primary pb-[2px] mb-4 capitalize;
     }
 
     .truncated-text {
