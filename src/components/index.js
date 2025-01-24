@@ -12,3 +12,6 @@ export {default as CollectionsContainer} from "./CollectionsContainer";
 export {default as CollectionItem} from "./CollectionItem";
 export {default as CreateNewCollection} from "./CreateNewCollection";
 export {default as AddNewMachine} from "./AddNewMachine";
+export {default as InitializeConsumptionModal} from "./InitializeConsumptionModal";
+export {default as SelectMachines} from "./SelectMachines";
+export {default as SelectCollections} from "./SelectCollections";

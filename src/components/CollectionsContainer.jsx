@@ -2,14 +2,16 @@ import React from 'react';
 import CollectionItem from './CollectionItem';
 import AddNew from './AddNew';
 
-const CollectionsContainer = ({collections}) => {
+const CollectionsContainer = ({collections, isAdd, isSelection, selectedMachines, setMachines}) => {
     return (
         <div className='flex gap-6 items-center flex-wrap gap-y-5 mt-6'>
             {collections.map((collection) => {        
                 const {id, name, machines} = collection;
-                return <CollectionItem key={id} id={id} img="/images/machine.png" name={name} machinesNumber={machines.length}/>;
+                return <CollectionItem key={id} id={id} img="/images/machine.png" name={name} machines={machines} 
+                        machinesNumber={machines.length} isSelection={isSelection} 
+                        selectedMachines={selectedMachines} setMachines={setMachines}/>;
             })}
-            <AddNew text="collection" id='addNewCollectionModal'/>
+            {isAdd ? (<AddNew text="collection" id='addNewCollectionModal'/>) : ''}
         </div>
     )
 }

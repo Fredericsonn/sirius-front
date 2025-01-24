@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const loader = (store) => async () => {
     const user = store.getState().userState.user;
+    console.log(user);
     const response = await spring.get('/users/collections', {params: {userId: user.id}} );
     const collections = response.data;
     return collections;
@@ -36,7 +37,7 @@ const Collections = () => {
     return (
         <>
             <h1 className='sectionTitle'>{collections.length > 0 ? "your collections" : "you haven't created any collections yet"}</h1>
-            <CollectionsContainer collections={collections}/>
+            <CollectionsContainer collections={collections} isAdd={true}/>
             <CreateNewCollection />
         </>
     )

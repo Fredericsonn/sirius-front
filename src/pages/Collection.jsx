@@ -10,7 +10,6 @@ export const loader = (store) => async ({params}) => {
   
   const response = await spring.get('/users/collections/' + name, {params: {userId}});
   const {machines, id} = response.data;
-  machines.map((m) => m.img = '/' + m.img);
 
   return {id, name, machines};
 }

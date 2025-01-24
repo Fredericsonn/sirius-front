@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { spring } from "../../util";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,7 +14,6 @@ const collectionSlice = createSlice({
     reducers: {
         addMachine: (state, action) => {
             const machine = action.payload;
-            machine.type = machine.usage === 'TRANSPORT' ?  'Vehicle' : 'Device';
             state.machines.push(machine);
             
         },
