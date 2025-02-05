@@ -10,19 +10,23 @@ const Machine = ({ machine, size, isSelection, selectedMachines, setMachines }) 
 
     const processMachine = () => {
         dispatch(add ? removeMachine(machine.id) : addMachine(machine));
-        if (add) {
-            selectedMachines = selectedMachines.filter((m) => m.id != machine.id);
+
+        if (selectedMachines) {
+            if (add) {
+                selectedMachines = selectedMachines.filter((m) => m.id != machine.id);
+            }
+            else {
+                selectedMachines.push(machine);
+            }
+            setMachines(selectedMachines);
         }
-        else {
-            selectedMachines.push(machine);
-        }
-        setMachines(selectedMachines);
-        setAdd(!add);     
+
+        setAdd(!add);
     }
 
     return (
         <div onClick={processMachine}
-        className='card w-52 justify-center items-center bg-base-300 shadow-xl hover:shadow-2xl hover:scale-105 transition duration-300 cursor-pointer relative'>
+            className='card w-52 justify-center items-center bg-base-300 shadow-xl hover:shadow-2xl hover:scale-105 transition duration-300 cursor-pointer relative'>
             <figure className="px-4 pt-4">
                 <img src={img ? img : "/images/machine.png"} alt={name} className={`rounded-xl h-64 md:h-48 w-full object-contain ${size}`}></img>
             </figure>
@@ -32,7 +36,7 @@ const Machine = ({ machine, size, isSelection, selectedMachines, setMachines }) 
             </div>
             {isSelection ? (<img src={add ? "/images/check.png" : "/images/circle.png"} alt="circle"
                 className='absolute top-2 right-2 w-10 h-10 hover:scale-105 duration-150'
-                />) : ''
+            />) : ''
             }
         </div>
     )
