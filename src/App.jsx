@@ -6,14 +6,16 @@ import { ErrorElement } from "./components";
 import { loader as catalogLoader } from "./pages/Catalog";
 import { loader as collectionsLoader } from "./pages/Collections";
 import { loader as collectionLoader } from "./pages/Collection";
+import { loader as resourcesLoader } from "./pages/Resource"; // Importez le loader de Resources
 
 // Actions
 import { action as registerAction } from "./pages/Register";
 import { action as loginAction } from "./pages/Login";
 import { action as collectionsAction } from "./pages/Collections";
 
+// Composants
+import  Resources  from "./pages/Resource"; // Importez le composant Resources
 import { store } from "./store";
-
 
 const router = createBrowserRouter([
   {
@@ -64,6 +66,12 @@ const router = createBrowserRouter([
         element: <Catalog />,
         errorElement: <ErrorElement />,
         loader: catalogLoader
+      },
+      {
+        path: '/resources',
+        element: <Resources />, // Ajoutez le composant Resources ici
+        errorElement: <ErrorElement />,
+        loader: resourcesLoader(store), // Ajoutez le loader (si nécessaire)
       }
     ]
   },
@@ -79,12 +87,12 @@ const router = createBrowserRouter([
     errorElement: <ErrorElement />,
     action: loginAction(store)
   }
-])
-const App = () => {
+]);
 
+const App = () => {
   return (
     <RouterProvider router={router} />
-  )
+  );
 };
 
-export default App
+export default App;
