@@ -20,7 +20,7 @@ export const loader = async () => {
         const response = await spring.get('/machines');
         console.log("Réponse de l'API :", response);
 
-        const resources = response.data; // Extrait les données de la réponse
+        const resources = response.data.devices.concat(response.data.vehicles); // Extrait les données de la réponse
         console.log("Données brutes reçues :", resources);
 
         // Objet pour stocker la somme des volumes par matière

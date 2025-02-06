@@ -11,7 +11,7 @@ const TableComponent = () => {
       try {
         console.log(user);
         const response = await spring.get('/machines');
-        setData(response.data);
+        setData(response.data.devices.concat(response.data.vehicles));
       } catch (error) {
         console.error('Erreur lors de la récupération des données:', error);
       }

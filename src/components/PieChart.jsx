@@ -21,7 +21,7 @@ const MaterialGroupChart = () => {
     const fetchData = async () => {
       try {
         const response = await spring.get('/machines');
-        const resources = response.data;
+        const resources = response.data.devices.concat(response.data.vehicles);
         const processedData = processData(resources);
         setChartData(processedData);
       } catch (err) {
