@@ -13,8 +13,8 @@ export const loader = async () => {
 
 export const CatalogContext = createContext();
 
-const Catalog = () => {
-    const data = useLoaderData();
+const Catalog = ({backup}) => {
+    const data = useLoaderData() ? useLoaderData() : backup;
     const [machines, setMachines] = useState(data);
     
     return (

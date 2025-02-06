@@ -1,9 +1,7 @@
 
 import {createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Home, Register, Users, Error, MachineList } from "./pages";
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Consumptions } from "./pages";
+import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList  } from "./pages";
 import { ErrorElement } from "./components";
 
 // Loaders
@@ -15,7 +13,7 @@ import { loader as collectionLoader } from "./pages/Collection";
 
 import { action as registerAction } from "./pages/Register";
 import { action as loginAction } from "./pages/Login";
-import Collection from "./pages/Collection";
+import { action as collectionsAction } from "./pages/Collections";
 
 import { store } from "./store";
 
@@ -45,7 +43,8 @@ const router = createBrowserRouter([
         path: '/tracer/collections',
         element: <Collections />,
         errorElement: <ErrorElement />,
-        loader: collectionsLoader(store)
+        loader: collectionsLoader(store),
+        action: collectionsAction(store)
       },
       {
         path: "/tracer/collections/:name",

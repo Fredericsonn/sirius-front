@@ -23,7 +23,16 @@ export default {
       'max-md': {'max': '767px'}, 
       'max-lg': {'max': '1023px'},
       'max-lg-2': {'max': '1094px'},
-    }
+    },
+    keyframes: {
+      'modal-pop': {
+        '0%': { transform: 'scale(0.9)', opacity: '0' },
+        '100%': { transform: 'scale(1)', opacity: '1' },
+      },
+    },
+    animation: {
+      'modal-pop': 'modal-pop 0.2s ease-out',
+    },
   },
   plugins: [require('@tailwindcss/typography'), require('daisyui')],
   daisyui: {

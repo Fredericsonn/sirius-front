@@ -27,7 +27,7 @@ const CatalogHeader = () => {
   )
 };
 
-const CatalogElement = ({ element }) => {
+const CatalogElement = ({ element, parent }) => {
   const img = header_details.find((category) => category.name === element).img;
 
   const setMachines = useContext(CatalogContext);
