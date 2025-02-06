@@ -6,6 +6,7 @@ const links = [
     {id: 2, url: '/about', text: 'About'},
     {id:4, url: '/catalog', text: 'Catalog'},
     {id: 3, url: '/tracer', text: 'My Tracer'},
+    {id: 5, url: '/resource', text: 'Resources'}
 ];
 
 const NavLinks = () => {

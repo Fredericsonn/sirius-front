@@ -12,3 +12,4 @@ export {default as Catalog} from "./Catalog";
 export {default as Collections} from "./Collections";
 export {default as Consumptions} from "./Consumptions";
 export {default as Collection} from "./Collection";
+export {default as Resources} from "./Resource";
