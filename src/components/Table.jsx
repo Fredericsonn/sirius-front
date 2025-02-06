@@ -1,119 +1,101 @@
-import React, { useEffect, useState } from 'react';
-import 'react-toastify/dist/ReactToastify.css';
-import machineLoader from '../components/TableLoader';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { spring } from '../util';
 
-function Table({ machineLoader }) {
-  const [resourceStats, setResourceStats] = useState({
-    components: {},
-    matters: {}
-  });
-
+const TableComponent = () => {
+  const [data, setData] = useState([]);
+  const user = useSelector(state => state.userState.user);
+  
   useEffect(() => {
-    const analyzeData = (machines) => {
-      if (!Array.isArray(machines)) {
-        console.warn('Data provided is not an array:', machines);
-        return { components: {}, matters: {} };
+    const fetchData = async () => {
+      try {
+        console.log(user);
+        const response = await spring.get('/machines');
+        setData(response.data);
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données:', error);
       }
-
-      const stats = {
-        components: {},  // Pour compter les composants
-        matters: {}      // Pour sommer les volumes de matières
-      };
-
-      machines.forEach(machine => {
-        if (machine?.resources && Array.isArray(machine.resources)) {
-          machine.resources.forEach(resource => {
-            // Compter les composants
-            if (resource?.name) {
-              stats.components[resource.name] = (stats.components[resource.name] || 0) + 1;
-            }
-
-            // Sommer les volumes des matières
-            if (resource?.matters && Array.isArray(resource.matters)) {
-              resource.matters.forEach(matter => {
-                if (matter?.value && matter?.volume) {
-                  if (!stats.matters[matter.value]) {
-                    stats.matters[matter.value] = 0;
-                  }
-                  stats.matters[matter.value] += matter.volume;
-                }
-              });
-            }
-          });
+    };
+    
+    fetchData();
+  }, [user]);
+  
+  // Fonction pour calculer la fréquence des composants
+  const calculateFrequency = (data) => {
+    const frequency = {};
+    
+    // Parcourir toutes les machines
+    data.forEach(machine => {
+      // Parcourir les ressources de chaque machine
+      machine.resources.forEach(resource => {
+        if (frequency[resource.name]) {
+          frequency[resource.name]++;
+        } else {
+          frequency[resource.name] = 1;
         }
       });
+    });
+    
+    // Convertir en tableau pour l'affichage
+    return Object.entries(frequency)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+  };
 
-      return stats;
-    };
+  const frequencyData = calculateFrequency(data);
 
-    if (data) {
-      setResourceStats(analyzeData(data));
+  const tableStyles = {
+    container: {
+      padding: '20px',
+      maxWidth: '800px',
+      margin: '0 auto',
+    },
+    title: {
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+      marginBottom: '1rem',
+    },
+    table: {
+      width: '100%',
+      borderCollapse: 'collapse',
+      marginTop: '1rem',
+    },
+    th: {
+      backgroundColor: '#f3f4f6',
+      padding: '12px',
+      textAlign: 'left',
+      borderBottom: '2px solid #e5e7eb',
+    },
+    td: {
+      padding: '12px',
+      borderBottom: '1px solid #e5e7eb',
+    },
+    rightAlign: {
+      textAlign: 'right',
     }
-  }, [data]);
-
-  if (!data) {
-    return (
-      <div style={{ textAlign: 'center', padding: '20px' }}>
-        Chargement des données...
-      </div>
-    );
-  }
-
-  if (Object.keys(resourceStats.components).length === 0) {
-    return (
-      <div style={{ textAlign: 'center', padding: '20px' }}>
-        Aucune donnée trouvée.
-      </div>
-    );
-  }
+  };
 
   return (
-    <div>
-      {/* Table des composants */}
-      <h3 style={{ marginTop: '20px' }}>Composants</h3>
-      <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
+    <div style={tableStyles.container}>
+      <h2 style={tableStyles.title}>Fréquence des Composants</h2>
+      <table style={tableStyles.table}>
         <thead>
-          <tr style={{ backgroundColor: '#f2f2f2' }}>
-            <th style={{ padding: '10px', border: '1px solid #ddd' }}>Composant</th>
-            <th style={{ padding: '10px', border: '1px solid #ddd' }}>Nombre d'occurrences</th>
+          <tr>
+            <th style={tableStyles.th}>Nom du Composant</th>
+            <th style={{...tableStyles.th, ...tableStyles.rightAlign}}>Nombre d'Occurrences</th>
           </tr>
         </thead>
         <tbody>
-          {Object.entries(resourceStats.components)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([component, count]) => (
-              <tr key={component}>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>{component}</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center' }}>{count}</td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
-
-      {/* Table des matières */}
-      <h3 style={{ marginTop: '30px' }}>Matières</h3>
-      <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
-        <thead>
-          <tr style={{ backgroundColor: '#f2f2f2' }}>
-            <th style={{ padding: '10px', border: '1px solid #ddd' }}>Matière</th>
-            <th style={{ padding: '10px', border: '1px solid #ddd' }}>Volume total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.entries(resourceStats.matters)
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([matter, volume]) => (
-              <tr key={matter}>
-                <td style={{ padding: '10px', border: '1px solid #ddd' }}>{matter}</td>
-                <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'center' }}>
-                  {volume.toFixed(2)}
-                </td>
-              </tr>
-            ))}
+          {frequencyData.map((item) => (
+            <tr key={item.name}>
+              <td style={tableStyles.td}>{item.name}</td>
+              <td style={{...tableStyles.td, ...tableStyles.rightAlign}}>{item.count}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
   );
-}
+};
 
-export default Table;
+export default TableComponent;

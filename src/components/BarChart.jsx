@@ -104,6 +104,7 @@ export const loader = async () => {
             </ResponsiveContainer>
         </div>
     );
+
 };
 
 export default Example;

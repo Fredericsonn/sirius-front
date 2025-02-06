@@ -6,7 +6,6 @@ import { ErrorElement } from "./components";
 import { loader as catalogLoader } from "./pages/Catalog";
 import { loader as collectionsLoader } from "./pages/Collections";
 import { loader as collectionLoader } from "./pages/Collection";
-import { loader as resourcesLoader } from "./pages/Resource"; // Importez le loader de Resources
 
 // Actions
 import { action as registerAction } from "./pages/Register";
@@ -14,8 +13,8 @@ import { action as loginAction } from "./pages/Login";
 import { action as collectionsAction } from "./pages/Collections";
 
 // Composants
-import  Resources  from "./pages/Resource"; // Importez le composant Resources
 import { store } from "./store";
+import Resources from "./pages/Resource";
 
 const router = createBrowserRouter([
   {
@@ -68,10 +67,9 @@ const router = createBrowserRouter([
         loader: catalogLoader
       },
       {
-        path: '/resources',
-        element: <Resources />, // Ajoutez le composant Resources ici
-        errorElement: <ErrorElement />,
-        loader: resourcesLoader(store), // Ajoutez le loader (si nécessaire)
+        path:'/resource',
+        element: <Resources />,
+        errorElement: <ErrorElement />
       }
     ]
   },
