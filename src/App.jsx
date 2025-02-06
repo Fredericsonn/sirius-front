@@ -13,9 +13,9 @@ import { loader as collectionLoader } from "./pages/Collection";
 import { action as registerAction } from "./pages/Register";
 import { action as loginAction } from "./pages/Login";
 import { action as collectionsAction } from "./pages/Collections";
+import ResourceWelcome from "./pages/Welcome2Resourec";
 
 import { store } from "./store";
-
 
 const router = createBrowserRouter([
   {
@@ -69,7 +69,12 @@ const router = createBrowserRouter([
       },
       {
         path:'/resource',
-        element: <Resources />,
+        element: <ResourceWelcome />,
+        errorElement: <ErrorElement />
+      },
+      {
+        path:'/resource/dashboard',
+        element:<Resources />,
         errorElement: <ErrorElement />
       }
     ]

@@ -150,4 +150,4 @@ const ImpactScoreCalculator = () => {
     );
 };
 
-export default ImpactScoreCalculator;
+export default ImpactScoreCalculator; 
