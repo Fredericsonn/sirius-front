@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import MachineItem from '../components/MachineItem';
+import { spring } from '../util';
 
 const MachineList = () => {
   const [id, setId] = useState('');
@@ -9,11 +10,9 @@ const MachineList = () => {
   const handleFetchMachines = async () => {
     setError(''); // Reset errors
     try {
-      const response = await fetch(`http://localhost:8080/comsumptions/${id}/items`);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data for ID: ${id}`);
-      }
-      const data = await response.json();
+      const response = await spring.get(`/comsumptions/${id}/items`)
+
+      const data = await response.data;
 
       // Mapper les données du back pour les adapter au component MachineItem
       const formattedMachines = data.map((item) => {
