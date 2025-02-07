@@ -5,7 +5,7 @@ import { spring } from "../util/index";
 const RADIAN = Math.PI / 180;
 const impactScores = {
     "Aluminium": 3, "Verre": 2, "Cuivre": 5, "Silicium": 4,
-    "Néodyme": 7, "Or": 9, "Lithium": 8, "Nickel": 6, "Encre": 5
+    "Néodyme": 7, "Or": 9, "Lithium": 8, "Nickel": 6, "Encre": 5,"plastique":10,
 };
 
 const ImpactScoreCalculator = () => {
@@ -150,4 +150,4 @@ const ImpactScoreCalculator = () => {
     );
 };
 
-export default ImpactScoreCalculator;
+export default ImpactScoreCalculator; 
