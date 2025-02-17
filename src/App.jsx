@@ -8,6 +8,7 @@ import { ErrorElement } from "./components";
 import { loader as catalogLoader } from "./pages/Catalog";
 import { loader as collectionsLoader } from "./pages/Collections";
 import { loader as collectionLoader } from "./pages/Collection";
+import { loader as consumptionsLoader } from "./pages/Consumptions";
 
 // Actions
 import { action as registerAction } from "./pages/Register";
@@ -54,7 +55,8 @@ const router = createBrowserRouter([
       {
         path: '/tracer/consumptions',
         element: <Consumptions />,
-        errorElement: <ErrorElement />
+        errorElement: <ErrorElement />,
+        loader: consumptionsLoader
       },
       {
         path: '/profile',
