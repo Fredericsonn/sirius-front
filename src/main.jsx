@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify'
 
 import { Provider } from 'react-redux';
 import { store } from './store.js';
+import Resources from './pages/Resource.jsx';
 
 
 createRoot(document.getElementById('root')).render(

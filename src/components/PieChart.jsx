@@ -11,7 +11,6 @@ const categories = {
   "Matériaux vitreux": ["Verre", "Silicium"],
   "Encres": ["Encre"],
 };
-
 const MaterialGroupChart = () => {
   const [chartData, setChartData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +33,6 @@ const MaterialGroupChart = () => {
     fetchData();
   }, []);
 
-  // Fonction pour traiter les données et regrouper par catégories
   const processData = (resources) => {
     const categorySums = {};
 
@@ -42,7 +40,6 @@ const MaterialGroupChart = () => {
       machine.resources.forEach(resource => {
         resource.matters.forEach(matter => {
           const { value, volume } = matter;
-          // Trouver la catégorie du matériau
           for (const [category, materials] of Object.entries(categories)) {
             if (materials.includes(value)) {
               categorySums[category] = (categorySums[category] || 0) + volume;
@@ -53,21 +50,18 @@ const MaterialGroupChart = () => {
       });
     });
 
-    // Convertir en format adapté pour le PieChart
     return Object.entries(categorySums).map(([name, value]) => ({
       name,
       value
     }));
   };
 
-  // Couleurs pour chaque catégorie
   const COLORS = [
     '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'
   ];
 
-  // Fonction pour afficher les étiquettes personnalisées
   const renderCustomizedLabel = ({
-    cx, cy, midAngle, innerRadius, outerRadius, percent, value
+    cx, cy, midAngle, innerRadius, outerRadius, percent
   }) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * Math.PI / 180);
@@ -81,7 +75,7 @@ const MaterialGroupChart = () => {
         textAnchor="middle"
         dominantBaseline="central"
       >
-        {`${value.toFixed(1)}`}
+        {`${(percent * 100).toFixed(0)}%`}
       </text>
     );
   };

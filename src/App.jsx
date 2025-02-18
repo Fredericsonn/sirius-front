@@ -8,14 +8,16 @@ import { ErrorElement } from "./components";
 import { loader as catalogLoader } from "./pages/Catalog";
 import { loader as collectionsLoader } from "./pages/Collections";
 import { loader as collectionLoader } from "./pages/Collection";
+import { loader as consumptionsLoader } from "./pages/Consumptions";
+import { loader as machinesLoader } from "./pages/MachineList";
 
 // Actions
 import { action as registerAction } from "./pages/Register";
 import { action as loginAction } from "./pages/Login";
 import { action as collectionsAction } from "./pages/Collections";
+import ResourceWelcome from "./pages/Welcome2Resourec";
 
 import { store } from "./store";
-
 
 const router = createBrowserRouter([
   {
@@ -54,7 +56,13 @@ const router = createBrowserRouter([
       {
         path: '/tracer/consumptions',
         element: <Consumptions />,
-        errorElement: <ErrorElement />
+        errorElement: <ErrorElement />,
+        loader: consumptionsLoader(store)
+      },
+      {
+        path: '/tracer/consumptions/:id',
+        element: <MachineList />,
+        loader: machinesLoader,
       },
       {
         path: '/profile',
@@ -69,7 +77,12 @@ const router = createBrowserRouter([
       },
       {
         path:'/resource',
-        element: <Resources />,
+        element: <ResourceWelcome />,
+        errorElement: <ErrorElement />
+      },
+      {
+        path:'/resource/dashboard',
+        element:<Resources />,
         errorElement: <ErrorElement />
       }
     ]
@@ -81,10 +94,6 @@ const router = createBrowserRouter([
     action: registerAction
   },
   
-  {
-    path: '/machineList',
-    element: <MachineList />
-  },
 
   {
     path: '/login',
