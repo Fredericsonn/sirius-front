@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const MachineItem = ({ nom, empreinteCarbone, quantite, urgence, categorie, substitutions }) => {
+const MachineItem = ({ img, nom, empreinteCarbone, quantite, urgence, categorie, substitutions }) => {
   const [afficherSubstitutions, setAfficherSubstitutions] = useState(false);
   const intensiteCarbone = (empreinteCarbone / quantite).toFixed(2);
 
@@ -10,7 +10,7 @@ const MachineItem = ({ nom, empreinteCarbone, quantite, urgence, categorie, subs
         {/* Image à gauche */}
         <div className="flex-shrink-0 mr-4">
           <img 
-            src="responsive.png" 
+            src={img} 
             alt="Machine" 
             className="h-16 w-16 object-contain"
           />

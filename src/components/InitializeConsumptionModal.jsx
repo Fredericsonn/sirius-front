@@ -30,7 +30,7 @@ const InitializeConsumptionModal = () => {
 
         fetchCollections();
         fetchCatalog();
-    })
+    }, [])
     
     return (
         <InitializedConsumptionContext.Provider value={{setSelectedMachines, selectedMachines}}>

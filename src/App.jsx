@@ -9,6 +9,7 @@ import { loader as catalogLoader } from "./pages/Catalog";
 import { loader as collectionsLoader } from "./pages/Collections";
 import { loader as collectionLoader } from "./pages/Collection";
 import { loader as consumptionsLoader } from "./pages/Consumptions";
+import { loader as machinesLoader } from "./pages/MachineList";
 
 // Actions
 import { action as registerAction } from "./pages/Register";
@@ -56,7 +57,12 @@ const router = createBrowserRouter([
         path: '/tracer/consumptions',
         element: <Consumptions />,
         errorElement: <ErrorElement />,
-        loader: consumptionsLoader
+        loader: consumptionsLoader(store)
+      },
+      {
+        path: '/tracer/consumptions/:id',
+        element: <MachineList />,
+        loader: machinesLoader,
       },
       {
         path: '/profile',
@@ -88,10 +94,6 @@ const router = createBrowserRouter([
     action: registerAction
   },
   
-  {
-    path: '/machineList',
-    element: <MachineList />
-  },
 
   {
     path: '/login',
