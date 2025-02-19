@@ -8,12 +8,10 @@ export const loader = async ({params}) => {
   const response = await spring.get(`/consumptions/${params.id}/items`);
   const data = response.data;
 
-  // Mapper les données du back pour les adapter au component MachineItem
   const formattedMachines = data.map((item) => {
 
     const intensiteCarbone = item.carbonFootprint / item.quantity;
 
-    // Mapper urgence
     let urgence = 'Faible';
     if (intensiteCarbone > 100) {
       urgence = 'Critique';
@@ -21,7 +19,6 @@ export const loader = async ({params}) => {
       urgence = 'Moyenne';
     }
 
-    // Mapper catégorie
     let categorie = 'E';
     if (intensiteCarbone <= 20) categorie = 'A';
     else if (intensiteCarbone <= 40) categorie = 'B';
@@ -30,12 +27,12 @@ export const loader = async ({params}) => {
 
     return {
       img: item.machine.img,
-      nom: item.name || 'Nom non disponible', // Si "nom" n'existe pas
+      nom: item.name || 'Nom non disponible', 
       empreinteCarbone: item.carbonFootprint,
       quantite: item.quantity,
       urgence: urgence,
       categorie: categorie,
-      substitutions: item.substitutions || [], // Si "substitutions" n'existe pas
+      substitutions: item.substitutions || [], 
     };
   });
   return formattedMachines;
@@ -47,7 +44,7 @@ const MachineList = () => {
     <div className="p-4">
       <h1 className="text-2xl font-bold text-white mb-6">Liste des machines ordonnées</h1>
 
-      {/* Affichage des machines */}
+      {}
       {machines.length > 0 ? (
         machines.map((machine, index) => (
           <MachineItem
