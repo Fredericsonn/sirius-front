@@ -6,19 +6,18 @@ const CollectionItem = ({ id, name, img, machines, machinesNumber, isSelection, 
   const [isSelected, setIsSelected] = useState(false);
 
   const processMachine = () => {
-    
-    if (isSelected) {
-      const ids = machines.map((m) => m.id);
-      selectedMachines = selectedMachines.filter((m) => !ids.includes(m.id));
-    }
-    
-    else {
-      const ids = selectedMachines.map((m) => m.id);
-      machines.map((machine) => {
-        if (!ids.includes(machine.id)) selectedMachines.push(machine);
-      });
-    }
-    setMachines(selectedMachines);
+    setMachines((prevMachines) => {
+      if (isSelected) {
+        const ids = machines.map((m) => m.id);
+        return prevMachines.filter((m) => !ids.includes(m.id));
+      }
+      
+      else {
+        const ids = selectedMachines.map((m) => m.id);
+        const newMachines = machines.filter((m) => !ids.includes(m.id));
+        return [...prevMachines,...newMachines]
+      }
+    })
     
     setAdd(!add);
     setIsSelected(!isSelected);

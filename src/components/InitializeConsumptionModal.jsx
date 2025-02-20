@@ -24,7 +24,6 @@ const InitializeConsumptionModal = () => {
             let machines = response.data.devices.concat(response.data.vehicles);
             const ids = selectedMachines.map((m) => m.id);
             machines = machines.filter((m) => !ids.includes(m.id));
-
             setCatalog(machines);
         }
 

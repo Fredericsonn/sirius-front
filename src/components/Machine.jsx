@@ -6,19 +6,27 @@ import { removeMachine } from '../features/collection/collectionSlice';
 const Machine = ({ machine, size, isSelection, selectedMachines, setMachines }) => {
     const dispatch = useDispatch();
     const { img, name } = machine;
-    const [add, setAdd] = useState(false);
+    const [add, setAdd] = useState(machine.isSelected ? machine.isSelected : false);
 
     const processMachine = () => {
         dispatch(add ? removeMachine(machine.id) : addMachine(machine));
 
         if (selectedMachines) {
-            if (add) {
-                selectedMachines = selectedMachines.filter((m) => m.id != machine.id);
-            }
-            else {
-                selectedMachines.push(machine);
-            }
-            setMachines(selectedMachines);
+            setMachines((prevMachines) => {
+                if (add) {
+                    machine.isSelected = false;
+                    return prevMachines.filter((m) => m.id != machine.id);
+                }
+                else {
+                    const ids = prevMachines.map((m) => {
+                        m = {...m, isSelected: true};
+                        return m.id;
+                    });
+                    const newMachine = {...machine, isSelected: true};
+                    if (!ids.includes(machine.id)) return [...prevMachines,newMachine];
+                    else return prevMachines;
+                }
+            });
         }
 
         setAdd(!add);
