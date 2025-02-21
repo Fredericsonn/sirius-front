@@ -26,16 +26,18 @@ const Consumptions = () => {
       </div>
       {consumptions.length > 0 ? (
         <table className='w-full bg-base-300 rounded-box p-6 table'>
-          <th className='text-center'>number</th>
-          <th className='text-center'>name</th>
-          <th className='text-center'>created at</th>
-          <th className='text-center'>CO2 emitted</th>
           <tbody className='rounded-box p-10'>
+            <tr>
+              <th className='text-center'>number</th>
+              <th className='text-center'>name</th>
+              <th className='text-center'>created at</th>
+              <th className='text-center'>CO2 emitted</th>
+            </tr>
             {consumptions.map((consumption) => {
               const { id, name, createdAt, totalCarbonEmitted } = consumption;
               return (
-                <tr className='hover:bg-base-200 rounded-box p-10 cursor-pointer' 
-                    onClick={() => navigate(`/tracer/consumptions/${id}`)}>
+                <tr key={id} className='hover:bg-base-200 rounded-box p-10 cursor-pointer'
+                  onClick={() => navigate(`/tracer/consumptions/${id}`)}>
                   <td className='text-center'>
                     {id}
                   </td>

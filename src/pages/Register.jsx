@@ -26,12 +26,13 @@ const Register = () => {
           <FormInput label="last name" type="text" name="lastName" placeholder="Last Name" size="btn-block" />
           <FormSelect label="gender" name="gender" placeholder="gender" size="btn-block" options={["Male", "Female"]} />
           <FormInput label="age" type="number" name="age" defaultValue="18" min={13} max={100} size="btn-block" />
-          <FormInput label="username" type="text" name="username" placeholder="username" size="btn-block" required={true} />
-          <FormInput label="email" type="email" name="email" placeholder="email" size="btn-block" required={true} />
-          <FormInput label="password" type="password" name="password" placeholder="password" size="btn-block" required={true} />
+          <FormInput label="username" type="text" name="username" placeholder="username" size="btn-block" required={true} defaultValue="eco" />
+          <FormInput label="email" type="email" name="email" placeholder="email" size="btn-block" required={true} defaultValue="eco@tracer.com" />
+          <FormInput label="password" type="password" name="password" placeholder="password" size="btn-block" required={true} defaultValue="ecotracer" />
           <button type='submit' className='btn btn-secondary btn-block uppercase mt-3'>register</button>
           <span className='text-center mt-2'>Already have an account ?
             <Link to='/login' className='link link-secondary no-underline'> Login</Link>
+            
           </span>
         </Form>
       </div>
