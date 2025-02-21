@@ -11,12 +11,12 @@ const MachineItem = ({ img, nom, empreinteCarbone, quantite, urgence, categorie,
         <div className="flex-shrink-0 mr-4">
           <img 
             src={img} 
-            alt="Machine" 
+            alt="machine" 
             className="h-16 w-16 object-contain"
           />
         </div>
 
-        {/* Description de la machine */}
+        {}
         <div className="flex-1">
           <h2 className="text-lg font-semibold">{nom}</h2>
           <p>Intensité carbone : {intensiteCarbone} Kg CO₂</p>
@@ -24,7 +24,7 @@ const MachineItem = ({ img, nom, empreinteCarbone, quantite, urgence, categorie,
           <p>Catégorie : {categorie}</p>
         </div>
 
-        {/* Bouton pour afficher/cacher les substitutions */}
+        {}
         <button 
           onClick={() => setAfficherSubstitutions(!afficherSubstitutions)} 
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

@@ -7,7 +7,6 @@ export const loader = (store) => async () => {
   const userId = store.getState().userState.user.id;
   const response = await spring.get('/consumptions', { params: { userId } });
   const consumptions = response.data.consumptions;
-
   return consumptions;
 }
 

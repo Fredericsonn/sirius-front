@@ -1,7 +1,7 @@
 
 import {createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources  } from "./pages";
+import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources, QuizQuestion  } from "./pages";
 import { ErrorElement } from "./components";
 
 // Loaders
@@ -10,6 +10,7 @@ import { loader as collectionsLoader } from "./pages/Collections";
 import { loader as collectionLoader } from "./pages/Collection";
 import { loader as consumptionsLoader } from "./pages/Consumptions";
 import { loader as machinesLoader } from "./pages/MachineList";
+import { loader as quizLoader } from ".pages/Machines"
 
 // Actions
 import { action as registerAction } from "./pages/Register";
