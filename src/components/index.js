@@ -16,4 +16,5 @@ export {default as AddNewMachine} from "./AddNewMachine";
 export {default as InitializeConsumptionModal} from "./InitializeConsumptionModal";
 export {default as SelectMachines} from "./SelectMachines";
 export {default as SelectCollections} from "./SelectCollections";
+export {default as CarbonReportModal} from "./CarbonReportModal";
 
