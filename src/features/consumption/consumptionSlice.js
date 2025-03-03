@@ -19,6 +19,6 @@ const consumptionSlice = createSlice({
     }
 });
 
-export const {addItem, clearItems} = consumptionSlice.actions;
+export const {addItem, clearItems, saveMachines} = consumptionSlice.actions;
 
 export default consumptionSlice.reducer;

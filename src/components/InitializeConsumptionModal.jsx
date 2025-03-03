@@ -2,7 +2,8 @@ import React, { createContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { clearMachines } from '../features/collection/collectionSlice';
 import { spring } from '../util';
-import { SelectMachines, SelectCollections, MachinesContainer, FormInput, CarbonReportModal } from '../components';
+import { SelectMachines, SelectCollections, MachinesContainer, FormInput, MachineParamsInsertionModal } from '../components';
+import { saveMachines } from '../features/consumption/consumptionSlice';
 
 export const InitializedConsumptionContext = createContext();
 
@@ -30,8 +31,8 @@ const InitializeConsumptionModal = () => {
 
         fetchCollections();
         fetchCatalog();
-    }, [])
-    
+    }, []);
+
     return (
         <InitializedConsumptionContext.Provider value={{ setSelectedMachines, selectedMachines, consumtpionName }}>
             <div className='flex w-full justify-center'>
@@ -74,12 +75,12 @@ const InitializeConsumptionModal = () => {
                                     document.getElementById('MachineParamsInsertionModal').showModal();
                                     document.getElementById('initializeConsumption').close();
                                     setConsumtpionName(document.getElementById('nameField').value)
-                                }}>calculate</button>
+                                }}>next</button>
                     </div>
                 </dialog>
                 <SelectCollections collections={collections} />
                 <SelectMachines machines={catalog} />
-                <CarbonReportModal />
+                <MachineParamsInsertionModal />
             </div>
         </InitializedConsumptionContext.Provider>
     )

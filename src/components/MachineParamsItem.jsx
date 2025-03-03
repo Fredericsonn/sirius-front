@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 
 const MachineParamsItem = ({ machine, selectMachine }) => {
     const { img, name } = machine;
-    console.log(machine.isSet);
     
     return (
         <div className="card justify-center items-center w-36 bg-base-300 shadow-xl hover:shadow-2xl hover:scale-105 transition duration-300 cursor-pointer relative pt-6"

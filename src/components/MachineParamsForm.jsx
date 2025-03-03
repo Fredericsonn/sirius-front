@@ -1,13 +1,15 @@
-import React, { useContext, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useContext, useEffect, useState, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../features/consumption/consumptionSlice';
 import { MachineParamsInsertionContext } from './MachineParamsInsertionModal';
 
 const MachineParamsForm = ({ machine }) => {
     const { id, img, name, type } = machine;
+    const items = useSelector((state) => state.consumptionState.items);
     const dispatch = useDispatch();
-    const {setMachines}  = useContext(MachineParamsInsertionContext);
-    
+    const { setMachines, machines } = useContext(MachineParamsInsertionContext);
+    const isFirstRender = useRef(true)
+
     const [energyType, setEnergyType] = useState('ELECTRICITY');
 
     const units = {
@@ -25,8 +27,12 @@ const MachineParamsForm = ({ machine }) => {
         document.getElementById('energyTypeInput').value = '';
     }
 
-    const resetValues = (id) => {
-        document.getElementById(id).value = '';
+    const resetValues = () => {
+        document.getElementById('itemName').value = '';
+        document.getElementById('energyTypeInput').value = '';
+        document.getElementById('usageDurationHours').value = 0;
+        document.getElementById('usageDurationHours').value = 0;
+        document.getElementById('quantityInput').value = 1;
     }
 
     const saveItem = (e) => {
@@ -43,28 +49,36 @@ const MachineParamsForm = ({ machine }) => {
         const item = {
             ...rest,
             machine: { id, type },
-            usageFrequency: usageDurationHours + usageDurationMinutes / 60
+            usageFrequency: (usageDurationHours + usageDurationMinutes / 60).toFixed(2)
         };
 
         // we save the item to the redux slice
         dispatch(addItem(item));
 
-        // we reset the input fields
-        resetValues('itemName');
-        resetValues('energyTypeInput');
-        resetValues('usageDurationHours');
-        resetValues('usageDurationMinutes');
-        resetValues('quantityInput');
-
         // we change the icon to selected
-        setMachines((prevMachines) => prevMachines.map((m) => {
-            if (m.id == id) m = {...m, isSet: true}
-        }))
+        setMachines((prevMachines) => prevMachines.map((m) =>
+            m.id === id ? { ...m, isSet: true } : m
+        ));
+
     };
 
+    useEffect(() => {
+        if (!isFirstRender) {
+            const isSet = machines.find((m) => m.id === id).isSet;
 
+            if (isSet) {
+                const item = items.find((i) => i.machine.id == id);
 
+                document.getElementById('itemName').value = item.name;
+                document.getElementById('energyTypeInput').value = item.energyInput;
+                document.getElementById('usageDurationHours').value = Math.trunc(item.usageFrequency);
+                document.getElementById('usageDurationMinutes').value = Math.round((item.usageFrequency - Math.trunc(item.usageFrequency)) * 60);
+                document.getElementById('quantityInput').value = item.quantity;
+            }
 
+            else resetValues();
+        }
+    }, [machines, machine]);
 
     return img ? (
         <main className='flex flex-col w-full'>
@@ -107,7 +121,7 @@ const MachineParamsForm = ({ machine }) => {
                 <label className='flex items-center mt-6 w-full'>
                     <span className='font-semibold capitalize tracking-wider w-1/4'>energy input:</span>
                     <div className='flex items-center gap-4 flex-1'>
-                        <input type="number" name="energyInput" id='energyTypeInput' className='input input-bordered' min={1} max={3000} placeholder={energyDefaultValues[energyType]} required />
+                        <input type="number" step='any' name="energyInput" id='energyTypeInput' className='input input-bordered' min={0} max={3000} placeholder={energyDefaultValues[energyType]} required />
                         <p className='font-semibold tracking-wider'>{units[energyType]}/h</p>
                     </div>
                 </label>
