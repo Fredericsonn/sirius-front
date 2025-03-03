@@ -71,7 +71,7 @@ const InitializeConsumptionModal = () => {
                     <div className='w-full flex justify-center'>
                         <button className='btn btn-primary uppercase mt-4'
                                 onClick={() => {
-                                    document.getElementById('CarbonReportModal').showModal();
+                                    document.getElementById('MachineParamsInsertionModal').showModal();
                                     document.getElementById('initializeConsumption').close();
                                     setConsumtpionName(document.getElementById('nameField').value)
                                 }}>calculate</button>

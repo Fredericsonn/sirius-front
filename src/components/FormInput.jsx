@@ -1,7 +1,7 @@
 import React from 'react'
 
 const FormInput = (props) => {
-    const {id, label, name, type, placeholder, defaultValue, size, required, min, max, isError, errorText, onChange} = props;
+    const {id, label, name, type, placeholder, defaultValue, size, required, min, max, isError, errorText} = props;
 
     return (
         <label className="form-control w-full">
@@ -16,8 +16,7 @@ const FormInput = (props) => {
                    defaultValue={defaultValue}
                    required={required}
                    min={min}
-                   max={max}
-                   onChange={(e) => onChange(e)}/>
+                   max={max} />
             <p className={`text-red-700 m-0 ml-1 mt-1 text-sm tracking-wide ${isError ? '' : 'hidden'}`}>{errorText}</p>
         </label>
     )
