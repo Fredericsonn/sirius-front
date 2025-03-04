@@ -9,6 +9,14 @@ const MachineParamsForm = ({ machine }) => {
     const dispatch = useDispatch();
     const { setMachines, machines } = useContext(MachineParamsInsertionContext);
     const isFirstRender = useRef(true)
+    const [formValues, setFormValues] = useState({
+        name: '',
+        energyType: 'ELECTRICITY',
+        energyInput: '',
+        usageDurationHours: 0,
+        usageDurationMinutes: 0,
+        quantity: 1
+    })
 
     const [energyType, setEnergyType] = useState('ELECTRICITY');
 
@@ -28,11 +36,14 @@ const MachineParamsForm = ({ machine }) => {
     }
 
     const resetValues = () => {
-        document.getElementById('itemName').value = '';
-        document.getElementById('energyTypeInput').value = '';
-        document.getElementById('usageDurationHours').value = 0;
-        document.getElementById('usageDurationHours').value = 0;
-        document.getElementById('quantityInput').value = 1;
+        setFormValues({
+            name: '',
+            energyType: 'ELECTRICITY',
+            energyInput: '',
+            usageDurationHours: 0,
+            usageDurationMinutes: 0,
+            quantity: 1
+        })
     }
 
     const saveItem = (e) => {
@@ -63,22 +74,36 @@ const MachineParamsForm = ({ machine }) => {
     };
 
     useEffect(() => {
-        if (!isFirstRender) {
-            const isSet = machines.find((m) => m.id === id).isSet;
-
-            if (isSet) {
-                const item = items.find((i) => i.machine.id == id);
-
-                document.getElementById('itemName').value = item.name;
-                document.getElementById('energyTypeInput').value = item.energyInput;
-                document.getElementById('usageDurationHours').value = Math.trunc(item.usageFrequency);
-                document.getElementById('usageDurationMinutes').value = Math.round((item.usageFrequency - Math.trunc(item.usageFrequency)) * 60);
-                document.getElementById('quantityInput').value = item.quantity;
-            }
-
-            else resetValues();
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
         }
-    }, [machines, machine]);
+
+        const isSet = machines?.find((m) => m.id === id)?.isSet;
+
+        if (isSet) {
+            const item = items.find((i) => i.machine.id == id);
+
+            const name = item.name;
+            const energyType = item.energyType;
+            const energyInput = item.energyInput;
+            const usageDurationHours = Math.trunc(item.usageFrequency);
+            const usageDurationMinutes = Math.round((item.usageFrequency - Math.trunc(item.usageFrequency)) * 60);
+            const quantity = item.quantity;
+
+            setFormValues({
+                name,
+                energyType,
+                energyInput,
+                usageDurationHours,
+                usageDurationMinutes,
+                quantity
+            })
+        }
+
+        else resetValues();
+
+    }, [id, machines, items]);
 
     return img ? (
         <main className='flex flex-col w-full'>
@@ -93,7 +118,8 @@ const MachineParamsForm = ({ machine }) => {
                 {/* ITEM NAME */}
                 <label className='flex items-center mt-6 w-full'>
                     <span className='font-semibold capitalize tracking-wider w-1/4'>item name:</span>
-                    <input type="text" name="name" id='itemName' className='input input-bordered text-sm w-96' placeholder={name + '-1' + ', Main ' + name + ',...'} />
+                    <input type="text" name="name" value={formValues.name} className='input input-bordered text-sm w-96' 
+                           placeholder={name + '-1' + ', Main ' + name + ',...'} onChange={(e) => setFormValues({ ...formValues, name: e.target.value })} />
                 </label>
 
                 {/* ENERGY TYPE SELECTION*/}
@@ -121,7 +147,8 @@ const MachineParamsForm = ({ machine }) => {
                 <label className='flex items-center mt-6 w-full'>
                     <span className='font-semibold capitalize tracking-wider w-1/4'>energy input:</span>
                     <div className='flex items-center gap-4 flex-1'>
-                        <input type="number" step='any' name="energyInput" id='energyTypeInput' className='input input-bordered' min={0} max={3000} placeholder={energyDefaultValues[energyType]} required />
+                        <input type="number" step='any' name="energyInput" value={formValues.energyInput} className='input input-bordered' min={0} max={3000} 
+                               placeholder={energyDefaultValues[energyType]} onChange={(e) => setFormValues({ ...formValues, energyInput: e.target.value })} required />
                         <p className='font-semibold tracking-wider'>{units[energyType]}/h</p>
                     </div>
                 </label>
@@ -131,11 +158,15 @@ const MachineParamsForm = ({ machine }) => {
                     <span className='font-semibold capitalize tracking-wider w-1/4'>usage duration:</span>
                     <div className='flex items-center gap-8 flex-1'>
                         <div className='flex items-center w-36 gap-4'>
-                            <input type="number" name="usageDurationHours" id='usageDurationHours' placeholder='1' className='input input-bordered text-sm w-24' min={0} max={24} defaultValue={0} required />
+                            <input type="number" name="usageDurationHours" value={formValues.usageDurationHours} placeholder='1' 
+                                   className='input input-bordered text-sm w-24' min={0} max={24} defaultValue={0} 
+                                   onChange={(e) => setFormValues({ ...formValues, usageDurationHours: e.target.value })} required />
                             <p className='font-semibold tracking-wider'>hours</p>
                         </div>
                         <div className='flex items-center w-36 gap-4'>
-                            <input type="number" name="usageDurationMinutes" id='usageDurationMinutes' placeholder='0' className='input input-bordered text-sm w-24' min={0} max={60} defaultValue={0} required />
+                            <input type="number" name="usageDurationMinutes" value={formValues.usageDurationMinutes} placeholder='0' 
+                                   className='input input-bordered text-sm w-24' min={0} max={60} defaultValue={0} 
+                                   onChange={(e) => setFormValues({ ...formValues, usageDurationMinutes: e.target.value })} required />
                             <p className='font-semibold tracking-wider'>minutes</p>
                         </div>
                     </div>
@@ -144,7 +175,8 @@ const MachineParamsForm = ({ machine }) => {
                 {/* QUANTITY */}
                 <label className='flex items-center mt-6 w-full'>
                     <span className='font-semibold capitalize tracking-wider w-1/4'>quantity:</span>
-                    <input type="number" name="quantity" id='quantityInput' placeholder='1' className='input input-bordered' min={1} defaultValue={1} required />
+                    <input type="number" name="quantity" value={formValues.quantity} placeholder='1' className='input input-bordered' 
+                           onChange={(e) => setFormValues({ ...formValues, quantity: e.target.value })} min={1} defaultValue={1} required />
 
                 </label>
 
