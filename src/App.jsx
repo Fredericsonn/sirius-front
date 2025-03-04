@@ -1,7 +1,7 @@
 
 import {createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources  } from "./pages";
+import { HomeLayout,QuizPage, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources  } from "./pages";
 import { ErrorElement } from "./components";
 
 // Loaders
@@ -52,6 +52,10 @@ const router = createBrowserRouter([
         element: <Collection />,
         errorElement: <ErrorElement />,
         loader: collectionLoader(store)
+      },
+      {
+        path: "tracer/consumptions/optimization",
+        element: <QuizPage />
       },
       {
         path: '/tracer/consumptions',

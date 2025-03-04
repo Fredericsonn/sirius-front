@@ -1,20 +1,38 @@
-import React from "react";
-import QuizForm from "../components/QuizForm";
-
-
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 const QuizPage = () => {
+  const { consumptionId } = useParams();
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    const fetchConsumptionItems = async () => {
+      try {
+        const response = await fetch(`/api/consumption/${consumptionId}/items`);
+        const data = await response.json();
+        setQuestions(
+          data.map((item) => ({
+            id: item.id,
+            question: `C'est quoi la fréquence d'utilisation minimale pour votre ${item.name} ?`,
+          }))
+        );
+      } catch (error) {
+        console.error("Error fetching consumption items:", error);
+      }
+    };
+
+    fetchConsumptionItems();
+  }, [consumptionId]);
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-6">
-      <div className="max-w-2xl w-full bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-center text-green-400 mb-4">
-          define Your Usage Constraints
-        </h1>
-        <p className="text-gray-300 text-center mb-6">
-          S
-          set the minimum usage frequency for each machine to optimize your carbon footprint.
-        </p>
-        <QuizForm />
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white p-4">
+      <div className="max-w-2xl w-full bg-gray-800 p-6 rounded-2xl shadow-lg">
+        <h1 className="text-2xl font-bold text-center mb-4">Quiz de consommation</h1>
+        {questions.length > 0 ? (
+          <QuizForm questions={questions} consumptionId={consumptionId} />
+        ) : (
+          <p className="text-center">Chargement des questions...</p>
+        )}
       </div>
     </div>
   );
