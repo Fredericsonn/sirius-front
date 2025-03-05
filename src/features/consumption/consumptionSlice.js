@@ -9,6 +9,10 @@ const consumptionSlice = createSlice({
     initialState,
     name: 'consumption',
     reducers: {
+        addName: (state,action) => {
+            const name = action.payload;
+            state.name = name;
+        },
         addItem: (state, action) => {
             const item = action.payload;
             state.items.push(item);
@@ -19,6 +23,6 @@ const consumptionSlice = createSlice({
     }
 });
 
-export const {addItem, clearItems, saveMachines} = consumptionSlice.actions;
+export const {addName, addItem, clearItems, saveMachines} = consumptionSlice.actions;
 
 export default consumptionSlice.reducer;

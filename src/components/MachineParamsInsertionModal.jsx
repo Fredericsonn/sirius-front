@@ -8,11 +8,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const MachineParamsInsertionContext = createContext();
 
-const MachineParamsInsertionModal = ({ consumption }) => {
+const MachineParamsInsertionModal = () => {
     const { selectedMachines } = useContext(InitializedConsumptionContext);
     const [machines, setMachines] = useState(selectedMachines);
     const [machine, setMachine] = useState({});
     const [error, setError] = useState(false);
+    const user = useSelector((state) => state.userState.user);
+    const {name, items} = useSelector((state) => state.consumptionState);
     const selectMachine = (machine) => {
         setMachine(machine);
     }
@@ -24,9 +26,28 @@ const MachineParamsInsertionModal = ({ consumption }) => {
         return machines.every((m) => m.isSet);
     }
 
-    const createConsumption = () => {
+    const doneSettingMachines = () => {
         if (!itemsAllSet()) setError(!error);
+
+        else document.getElementById('ConfirmationModal').showModal();
     }
+
+    const createConsumption = async () => {
+        const data = {
+            name: name,
+            user,
+            items
+        }
+
+        try {
+            const response = await spring.post('/consumptions/post', data);
+        } catch (error) {
+            console.log(error);    
+        }
+        
+        return response?.data?.consumption;
+    }
+
     return (
         <MachineParamsInsertionContext.Provider value={{ setMachine, setMachines, machines }}>
             <ToastContainer position="top-center" autoClose={3000} />
@@ -38,13 +59,9 @@ const MachineParamsInsertionModal = ({ consumption }) => {
                             document.getElementById('MachineParamsInsertionModal').close();
                         }}>✕
                     </button>
-                    {/* <section className='flex flex-col justify-center items-center w-full'>
-                    <h1 className='text-2xl'>Your consumptions produces:</h1>
-                    <p className='font-bold text-2xl italic text-center text-secondary underline'>
-                        {consumption ? consumption.totalCarbonEmitted : 570} KgCO2</p>
-                </section> */}
+
                     <div className='flex justify-center w-full'>
-                        <div className='flex flex-col w-[55%] justify-center mt-10 border-r-4 border-secondary pr-4'>
+                        <div className='flex flex-col w-[35%] justify-center mt-10 border-r-4 border-secondary pr-4'>
                             <h1 className='sectionTitle'>Your Selected Machines :</h1>
                             <section className='flex flex-wrap justify-start items-start gap-4 w-fit'>
                                 {machines.map((m) => {

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearMachines } from '../features/collection/collectionSlice';
 import { spring } from '../util';
 import { SelectMachines, SelectCollections, MachinesContainer, FormInput, MachineParamsInsertionModal } from '../components';
-import { saveMachines } from '../features/consumption/consumptionSlice';
+import { addName } from '../features/consumption/consumptionSlice';
 
 export const InitializedConsumptionContext = createContext();
 
@@ -13,8 +13,24 @@ const InitializeConsumptionModal = () => {
     const [collections, setCollections] = useState([]);
     const [catalog, setCatalog] = useState([]);
     const [selectedMachines, setSelectedMachines] = useState([]);
-    const [consumtpionName, setConsumtpionName] = useState('')
+    const [name, setName] = useState('');
+    const [error, setError] = useState(false);
 
+    const isNameSet = () => {
+        return selectedMachines.length > 0 && name != '';
+    }
+
+    const next = () => {
+        if (!isNameSet()) {
+            setError(true);
+        }
+
+        else {
+            document.getElementById('MachineParamsInsertionModal').showModal();
+            document.getElementById('initializeConsumption').close();
+            dispatch(addName(name));
+        }
+    }
     useEffect(() => {
         const fetchCollections = async () => {
             const response = await spring.get('/users/collections', { params: { userId: user.id } });
@@ -34,7 +50,7 @@ const InitializeConsumptionModal = () => {
     }, []);
 
     return (
-        <InitializedConsumptionContext.Provider value={{ setSelectedMachines, selectedMachines, consumtpionName }}>
+        <InitializedConsumptionContext.Provider value={{ setSelectedMachines, selectedMachines }}>
             <div className='flex w-full justify-center'>
                 <dialog id="initializeConsumption" className="fixed inset-0 z-50 w-[75%] rounded-box bg-base-100 p-4 backdrop:bg-black/60 backdrop-blur-sm animate-modal-pop">
                     <h3 className="font-semibold tracking-widest italic text-lg mb-4">Consumption Initialization</h3>
@@ -46,7 +62,9 @@ const InitializeConsumptionModal = () => {
                     </button>
                     <section className='flex flex-col w-full mb-4'>
                         <h1 className='text-2xl font-semibold italic tracking-wide capitalize'>1- consumption name</h1>
-                        <FormInput type="text" placeholder={`"Kitchen", "Bedroom 1", "Living Room", ....`} size="lg" id="nameField"/>
+                        <input type='text' placeholder={`"Kitchen", "Bedroom 1", "Living Room", ....`}
+                            className='input input-bordered w-lg' onChange={(e) => setName(e.target.value)}
+                            required />
                     </section>
                     <h1 className='sectionTitle'>2- Machines Selection</h1>
                     <section className='flex w-full justify-around mt-6 mb-6'>
@@ -69,13 +87,28 @@ const InitializeConsumptionModal = () => {
                         }} className='btn btn-secondary'>clear</button>
                     </div>
                     <MachinesContainer machines={selectedMachines} />
-                    <div className='w-full flex justify-center'>
-                        <button className='btn btn-primary uppercase mt-4'
-                                onClick={() => {
-                                    document.getElementById('MachineParamsInsertionModal').showModal();
-                                    document.getElementById('initializeConsumption').close();
-                                    setConsumtpionName(document.getElementById('nameField').value)
-                                }}>next</button>
+                    <div className='w-full flex flex-col justify-center items-center'>
+                        {error && (
+                            <>
+                                {name === '' && (
+                                    <div className='flex justify-center items-center w-full gap-2 mt-2'>
+                                        <img src="/images/error.png" alt="error" className='w-6 h-6 object-contain' />
+                                        <p className='font-semibold text-sm tracking-wider italic'>You must enter a name for your consumption</p>
+                                    </div>
+                                )}
+
+                                {selectedMachines.length === 0 && (
+                                    <div className='flex justify-center items-center w-full gap-2 mt-2'>
+                                        <img src="/images/error.png" alt="error" className='w-6 h-6 object-contain' />
+                                        <p className='font-semibold text-sm tracking-wider italic'>You must select at least one machine for your consumption</p>
+                                    </div>
+                                )}
+                            </>
+                        )}
+
+                        <button className='btn btn-primary uppercase mt-4' onClick={next}>
+                            next
+                        </button>
                     </div>
                 </dialog>
                 <SelectCollections collections={collections} />
