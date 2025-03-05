@@ -59,7 +59,7 @@ const MachineParamsForm = ({ machine }) => {
 
         const item = {
             ...rest,
-            machine: { id, type },
+            machine: { id, type: type.charAt(0).toUpperCase() + type.slice(1) },
             usageFrequency: (usageDurationHours + usageDurationMinutes / 60).toFixed(2)
         };
 
