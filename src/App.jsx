@@ -64,6 +64,7 @@ const router = createBrowserRouter([
         element: <MachineList />,
         loader: machinesLoader,
       },
+     
       {
         path: '/profile',
         element: <Profile />,
