@@ -4,17 +4,19 @@ import { clearMachines } from '../features/collection/collectionSlice';
 import { spring } from '../util';
 import { SelectMachines, SelectCollections, MachinesContainer, FormInput, MachineParamsInsertionModal } from '../components';
 import { addName } from '../features/consumption/consumptionSlice';
+import { useNavigate } from 'react-router-dom';
 
 export const InitializedConsumptionContext = createContext();
 
 const InitializeConsumptionModal = () => {
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.userState);
+    const user = useSelector((state) => state.userState.user);
     const [collections, setCollections] = useState([]);
     const [catalog, setCatalog] = useState([]);
     const [selectedMachines, setSelectedMachines] = useState([]);
     const [name, setName] = useState('');
     const [error, setError] = useState(false);
+    const navigate = useNavigate();
 
     const isNameSet = () => {
         return selectedMachines.length > 0 && name != '';
@@ -31,6 +33,36 @@ const InitializeConsumptionModal = () => {
             dispatch(addName(name));
         }
     }
+
+    const fast = async () => {
+        if (!isNameSet()) {
+            setError(true);
+        }
+
+        else {
+            let items = [];
+            selectedMachines.map((m) => {
+                items.push({
+                    name: m.name,
+                    machine: {
+                        id: m.id,
+                        type: m.usage === 'TRANSPORT' ? 'Vehicle' : 'Device'
+                    }
+                })
+            })
+            const data = {
+                name,
+                user,
+                items
+            };
+
+            const response = await spring.post('/consumptions/post/temp', data);
+            const consumption = response.data;
+
+            document.getElementById('initializeConsumption').close();
+            navigate(`/tracer/consumptions/${consumption.id}`);
+        }
+    }
     useEffect(() => {
         const fetchCollections = async () => {
             const response = await spring.get('/users/collections', { params: { userId: user.id } });
@@ -42,6 +74,7 @@ const InitializeConsumptionModal = () => {
             let machines = response.data.devices.concat(response.data.vehicles);
             const ids = selectedMachines.map((m) => m.id);
             machines = machines.filter((m) => !ids.includes(m.id));
+            machines = machines.map((m) => ({ ...m, isSelected: false }))
             setCatalog(machines);
         }
 
@@ -49,8 +82,9 @@ const InitializeConsumptionModal = () => {
         fetchCatalog();
     }, []);
 
+
     return (
-        <InitializedConsumptionContext.Provider value={{ setSelectedMachines, selectedMachines }}>
+        <InitializedConsumptionContext.Provider value={{ setSelectedMachines, selectedMachines, setCatalog }}>
             <div className='flex w-full justify-center'>
                 <dialog id="initializeConsumption" className="fixed inset-0 z-50 w-[75%] rounded-box bg-base-100 p-4 backdrop:bg-black/60 backdrop-blur-sm animate-modal-pop">
                     <h3 className="font-semibold tracking-widest italic text-lg mb-4">Consumption Initialization</h3>
@@ -63,7 +97,7 @@ const InitializeConsumptionModal = () => {
                     <section className='flex flex-col w-full mb-4'>
                         <h1 className='text-2xl font-semibold italic tracking-wide capitalize'>1- consumption name</h1>
                         <input type='text' placeholder={`"Kitchen", "Bedroom 1", "Living Room", ....`}
-                            className='input input-bordered w-lg' onChange={(e) => setName(e.target.value)}
+                            className='input input-bordered w-lg mt-2' onChange={(e) => setName(e.target.value)}
                             required />
                     </section>
                     <h1 className='sectionTitle'>2- Machines Selection</h1>
@@ -106,9 +140,14 @@ const InitializeConsumptionModal = () => {
                             </>
                         )}
 
-                        <button className='btn btn-primary uppercase mt-4' onClick={next}>
-                            next
-                        </button>
+                        <div className='flex gap-2'>
+                            <button className='btn btn-primary uppercase mt-4' onClick={next}>
+                                next
+                            </button>
+                            <button className='btn btn-secondary uppercase mt-4' onClick={fast}>
+                                fast calculation
+                            </button>
+                        </div>
                     </div>
                 </dialog>
                 <SelectCollections collections={collections} />

@@ -2,6 +2,8 @@ import React from 'react'
 import { InitializeConsumptionModal } from '../components';
 import { spring } from '../util';
 import { useLoaderData, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { clearItems } from '../features/consumption/consumptionSlice';
 
 export const loader = (store) => async () => {
   const userId = store.getState().userState.user.id;
@@ -14,6 +16,7 @@ export const loader = (store) => async () => {
 const Consumptions = () => {
   const consumptions = useLoaderData();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
     <main>
@@ -21,7 +24,7 @@ const Consumptions = () => {
         <h1 className='font-semibold tracking-wider capitalize'>your comsumptions </h1>
         <button onClick={() => document.getElementById('initializeConsumption').showModal()} className='flex items-center gap-2 bg-blue-600 p-2 rounded-box hover:scale-105 duration-200'>
           <img src="/images/add.png" alt="add" className='w-6 h-6 object-cover' />
-          <span className='text-sm text-white'>create a new consumption</span>
+          <span className='text-sm text-white' onClick={() => dispatch(clearItems())}>create a new consumption</span>
         </button>
       </div>
       {consumptions.length > 0 ? (
@@ -48,7 +51,7 @@ const Consumptions = () => {
                     {createdAt}
                   </td>
                   <td className='text-center'>
-                    {totalCarbonEmitted}
+                    {totalCarbonEmitted.toFixed(2)}
                   </td>
                 </tr>
               )

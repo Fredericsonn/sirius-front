@@ -5,6 +5,7 @@ import MachineParamsForm from './MachineParamsForm';
 import CarbonReportModal from './CarbonReportModal';
 import { useSelector } from 'react-redux';
 import { spring } from '../util';
+import { useNavigate } from 'react-router-dom';
 
 export const MachineParamsInsertionContext = createContext();
 
@@ -27,7 +28,6 @@ const MachineParamsInsertionModal = () => {
     }
 
     const doneSettingMachines = () => {
-    const doneSettingMachines = () => {
         if (!itemsAllSet()) setError(!error);
 
         else document.getElementById('ConfirmationModal').showModal();
@@ -40,11 +40,14 @@ const MachineParamsInsertionModal = () => {
             items
         }
 
+        let response;
         try {
-            const response = await spring.post('/consumptions/post', data);
+            response = await spring.post('/consumptions/post', data);
+            
         } catch (error) {
             console.log(error);    
         }
+        
         
         return response?.data?.consumption;
     }
@@ -91,15 +94,21 @@ const MachineParamsInsertionModal = () => {
 
 const ConfirmationModal = ({createConsumption}) => {
 
+    const navigate = useNavigate();
+
     return (
         <dialog id="ConfirmationModal" className="fixed inset-0 z-50 w-[38%] rounded-box bg-base-100 p-4 backdrop:bg-black/60 backdrop-blur-sm animate-modal-pop">
             <section className='flex flex-col w-full items-center gap-10'>
                 <h1 className='text-xl font-semibold tracking-wider'>Are you sure you're done setting your machines ?</h1>
                 <div className='flex justify-between w-64'>
                     <button className='w-12 h-12 hover:scale-110 duration-200' title='yes'
-                            onClick={() => {
-                                createConsumption();
+                            onClick={async () => {
+                                const consumption = await createConsumption();
+                                
                                 document.getElementById('ConfirmationModal').close();
+                                document.getElementById('MachineParamsInsertionModal').close();
+                                navigate(`/tracer/consumptions/${consumption.id}`);
+
                             }}>
                         <img src="/images/confirm.png" alt="confirm" className='object-cover' />
                     </button>

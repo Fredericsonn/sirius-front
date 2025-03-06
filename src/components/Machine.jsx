@@ -14,9 +14,9 @@ const Machine = ({ machine, size, isSelection, selectedMachines, setMachines }) 
 
         if (selectedMachines) {
             setMachines((prevMachines) => {
-                if (add) {
-                    machine.isSelected = false;
-                    return prevMachines.filter((m) => m.id != machine.id);
+                if (add) {  
+                    const newMachine = {...machine, isSelected: false};
+                    return prevMachines.filter((m) => m.id != newMachine.id);
                 }
                 else {
                     const ids = prevMachines.map((m) => {

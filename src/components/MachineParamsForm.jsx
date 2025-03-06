@@ -55,7 +55,7 @@ const MachineParamsForm = ({ machine }) => {
 
     const resetValues = () => {
         setFormValues({
-            name: '',
+            name,
             energyType: 'ELECTRICITY',
             energyInput: '',
             usageDurationHours: 0,
@@ -142,7 +142,7 @@ const MachineParamsForm = ({ machine }) => {
                 <label className='flex items-center mt-6 w-full'>
                     <span className='font-semibold capitalize tracking-wider w-1/4'>item name:</span>
                     <input type="text" name="name" value={formValues.name} className='input input-bordered text-sm w-96'
-                        placeholder={name + '-1' + ', Main ' + name + ',...'} onChange={(e) => setFormValues({ ...formValues, name: e.target.value })} />
+                        placeholder={name + '-1' + ', Main ' + name + ',...'} onChange={(e) => setFormValues({ ...formValues, name: e.target.value })} required />
                 </label>
 
                 {/* ENERGY TYPE SELECTION*/}

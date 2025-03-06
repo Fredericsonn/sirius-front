@@ -18,4 +18,5 @@ export {default as SelectMachines} from "./SelectMachines";
 export {default as SelectCollections} from "./SelectCollections";
 export {default as MachineParamsInsertionModal} from "./MachineParamsInsertionModal";
 export {default as CarbonReportMachine} from "./MachineParamsItem";
+export {default as MachineList} from "./MachineList";
 
