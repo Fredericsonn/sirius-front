@@ -1,7 +1,7 @@
 import React from 'react'
 import { InitializeConsumptionModal } from '../components';
 import { spring } from '../util';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 
 export const loader = (store) => async () => {
   const userId = store.getState().userState.user.id;
@@ -47,6 +47,9 @@ const Consumptions = () => {
                   </td>
                   <td className='text-center'>
                     {totalCarbonEmitted}
+                  </td>
+                  <td>
+                    <Link to={'/tracer/consumptions/optimize/' + id } onClick={(e) => e.stopPropagation()} className='btn-secondary btn btn-sm'>optimize</Link>
                   </td>
                 </tr>
               )

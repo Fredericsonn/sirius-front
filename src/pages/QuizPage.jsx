@@ -6,6 +6,7 @@ import QuizNavigation from '../components/QuizNavigation';
 
 function QuizPage() {
     const { consumptionId } = useParams();
+    
     const navigate = useNavigate();
     const [consumptionItems, setConsumptionItems] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -17,10 +18,11 @@ function QuizPage() {
 
 
     useEffect(() => {
+        
         const fetchConsumptionItems = async () => {
-            try {
+            try {                
                 const response = await axios.get(`/consumptions/${consumptionId}/items`);
-                setConsumptionItems(response.data);
+                setConsumptionItems(response?.data);
                 const initialAnswers = {};
                 response.data.forEach(item => {
                    initialAnswers[item.id] = item.usageFrequency;
@@ -28,6 +30,8 @@ function QuizPage() {
                 setAnswers(initialAnswers);
 
                 const res = await axios.get(`/consumptions/${consumptionId}`);
+                
+                
                 setName(res.data.name);
 
             } catch (err) {
@@ -73,6 +77,7 @@ function QuizPage() {
         try {
 
             const response = await axios.post('/api/quiz/constraints', requestData);
+            
             console.log('Réponse du serveur:', response.data);
             navigate(`/optimize/${consumptionId}`); 
 
