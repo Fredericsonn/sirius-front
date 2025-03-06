@@ -1,7 +1,7 @@
 
 import {createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources  } from "./pages";
+import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources, QuizPage  } from "./pages";
 import { ErrorElement } from "./components";
 
 // Loaders
@@ -64,6 +64,7 @@ const router = createBrowserRouter([
         element: <Consumption />,
         loader: consumptionLoader,
       },
+     
       {
         path: '/profile',
         element: <Profile />,
@@ -83,6 +84,11 @@ const router = createBrowserRouter([
       {
         path:'/resource/dashboard',
         element:<Resources />,
+        errorElement: <ErrorElement />
+      },
+      {
+        path:'/tracer/consumptions/optimize/:consumptionId',
+        element:<QuizPage />,
         errorElement: <ErrorElement />
       }
     ]
