@@ -14,3 +14,4 @@ export {default as Consumptions} from "./Consumptions";
 export {default as Collection} from "./Collection";
 export {default as Resources} from "./Resource";
 export {default as Consumption} from "./Consumption";
+export {default as QuizPage} from "./QuizPage";
