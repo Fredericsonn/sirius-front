@@ -1,7 +1,7 @@
 
 import {createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources  } from "./pages";
+import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources, QuizPage  } from "./pages";
 import { ErrorElement } from "./components";
 
 // Loaders
@@ -9,7 +9,7 @@ import { loader as catalogLoader } from "./pages/Catalog";
 import { loader as collectionsLoader } from "./pages/Collections";
 import { loader as collectionLoader } from "./pages/Collection";
 import { loader as consumptionsLoader } from "./pages/Consumptions";
-import { loader as machinesLoader } from "./pages/MachineList";
+import Consumption, { loader as consumptionLoader } from "./pages/Consumption";
 
 // Actions
 import { action as registerAction } from "./pages/Register";
@@ -61,9 +61,10 @@ const router = createBrowserRouter([
       },
       {
         path: '/tracer/consumptions/:id',
-        element: <MachineList />,
-        loader: machinesLoader,
+        element: <Consumption />,
+        loader: consumptionLoader,
       },
+     
       {
         path: '/profile',
         element: <Profile />,
@@ -83,6 +84,11 @@ const router = createBrowserRouter([
       {
         path:'/resource/dashboard',
         element:<Resources />,
+        errorElement: <ErrorElement />
+      },
+      {
+        path:'/tracer/consumptions/optimize/:consumptionId',
+        element:<QuizPage />,
         errorElement: <ErrorElement />
       }
     ]

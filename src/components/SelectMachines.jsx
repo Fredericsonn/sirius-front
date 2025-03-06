@@ -3,6 +3,7 @@ import MachinesContainer from './MachinesContainer';
 import { InitializedConsumptionContext } from './InitializeConsumptionModal';
 
 const SelectMachines = ({machines}) => {
+    
     const {setSelectedMachines, selectedMachines} = useContext(InitializedConsumptionContext);
     return (
         <div className='flex w-full justify-center'>
