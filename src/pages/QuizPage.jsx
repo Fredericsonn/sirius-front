@@ -19,7 +19,7 @@ function QuizPage() {
     useEffect(() => {
         const fetchConsumptionItems = async () => {
             try {
-                const response = await axios.get(`/api/consumptions/${consumptionId}/items`);
+                const response = await axios.get(`/consumptions/${consumptionId}/items`);
                 setConsumptionItems(response.data);
                 const initialAnswers = {};
                 response.data.forEach(item => {
@@ -27,7 +27,7 @@ function QuizPage() {
                 });
                 setAnswers(initialAnswers);
 
-                const res = await axios.get(`/api/consumptions/${consumptionId}`);
+                const res = await axios.get(`/consumptions/${consumptionId}`);
                 setName(res.data.name);
 
             } catch (err) {
