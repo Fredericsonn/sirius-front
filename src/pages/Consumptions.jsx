@@ -1,7 +1,9 @@
 import React from 'react'
 import { InitializeConsumptionModal } from '../components';
 import { spring } from '../util';
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { useLoaderData, useNavigate, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { clearItems } from '../features/consumption/consumptionSlice';
 
 export const loader = (store) => async () => {
   const userId = store.getState().userState.user.id;
@@ -14,28 +16,31 @@ export const loader = (store) => async () => {
 const Consumptions = () => {
   const consumptions = useLoaderData();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
     <main>
       <div className='flex justify-between items-center w-full sectionTitle'>
         <h1 className='font-semibold tracking-wider capitalize'>your comsumptions </h1>
-        <button onClick={() => document.getElementById('initializeConsumption').showModal()} className='flex items-center gap-2 bg-orange-600 p-2 rounded-box hover:scale-105 duration-200'>
+        <button onClick={() => document.getElementById('initializeConsumption').showModal()} className='flex items-center gap-2 bg-blue-600 p-2 rounded-box hover:scale-105 duration-200'>
           <img src="/images/add.png" alt="add" className='w-6 h-6 object-cover' />
-          <span className='text-sm text-white'>create a new consumption</span>
+          <span className='text-sm text-white' onClick={() => dispatch(clearItems())}>create a new consumption</span>
         </button>
       </div>
       {consumptions.length > 0 ? (
         <table className='w-full bg-base-300 rounded-box p-6 table'>
-          <th className='text-center'>number</th>
-          <th className='text-center'>name</th>
-          <th className='text-center'>created at</th>
-          <th className='text-center'>CO2 emitted</th>
           <tbody className='rounded-box p-10'>
+            <tr>
+              <th className='text-center'>number</th>
+              <th className='text-center'>name</th>
+              <th className='text-center'>created at</th>
+              <th className='text-center'>CO2 emitted</th>
+            </tr>
             {consumptions.map((consumption) => {
               const { id, name, createdAt, totalCarbonEmitted } = consumption;
               return (
-                <tr className='hover:bg-base-200 rounded-box p-10 cursor-pointer' 
-                    onClick={() => navigate(`/tracer/consumptions/${id}`)}>
+                <tr key={id} className='hover:bg-base-200 rounded-box p-10 cursor-pointer'
+                  onClick={() => navigate(`/tracer/consumptions/${id}`)}>
                   <td className='text-center'>
                     {id}
                   </td>
@@ -46,7 +51,10 @@ const Consumptions = () => {
                     {createdAt}
                   </td>
                   <td className='text-center'>
-                    {totalCarbonEmitted}
+                    {totalCarbonEmitted.toFixed(2)}
+                  </td>
+                  <td>
+                    <Link to={'/tracer/consumptions/optimize/' + id } onClick={(e) => e.stopPropagation()} className='btn-secondary btn btn-sm'>optimize</Link>
                   </td>
                 </tr>
               )
