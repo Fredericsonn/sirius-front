@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import QuizQuestion from '../components/QuizQuestion';
 import QuizNavigation from '../components/QuizNavigation';
+import { spring } from '../util';
 
 function QuizPage() {
     const { consumptionId } = useParams();
@@ -15,13 +15,15 @@ function QuizPage() {
     const [error, setError] = useState(null);
     const [quizStarted, setQuizStarted] = useState(false);
     const [name,setName] = useState("");
+    const [isOptimized, setIsOptimized] = useState(false);
+    const [optimizedValue, setOptimizedValue] = useState(false);
 
 
     useEffect(() => {
         
         const fetchConsumptionItems = async () => {
             try {                
-                const response = await axios.get(`/consumptions/${consumptionId}/items`);
+                const response = await spring.get(`/consumptions/${consumptionId}/items`);
                 setConsumptionItems(response?.data);
                 const initialAnswers = {};
                 response.data.forEach(item => {
@@ -29,7 +31,7 @@ function QuizPage() {
                 });
                 setAnswers(initialAnswers);
 
-                const res = await axios.get(`/consumptions/${consumptionId}`);
+                const res = await spring.get(`/consumptions/${consumptionId}`);
                 
                 
                 setName(res.data.name);
@@ -73,13 +75,18 @@ function QuizPage() {
             consumptionId: parseInt(consumptionId), 
             constraints: constraints
         }
-
+        
         try {
 
-            const response = await axios.post('/api/quiz/constraints', requestData);
+            const response = await spring.post('/api/quiz/constraints', requestData);
             
             console.log('Réponse du serveur:', response.data);
-            navigate(`/optimize/${consumptionId}`); 
+            
+            const res = await spring.get('/api/optimize/' + consumptionId);
+
+            setOptimizedValue(res.data.optimizedCarbonFootprint);
+
+            setIsOptimized(true);
 
         } catch (err) {
             setError(err.response?.data?.message || err.message || 'erreur de la soumission des reponses');
@@ -121,6 +128,9 @@ function QuizPage() {
         );
     }
 
+    if (isOptimized) {
+        return <OptimizationReport optimizedCarbonFootprint={optimizedValue} />
+    }
     const currentItem = consumptionItems[currentQuestionIndex];
 
     return (
@@ -146,4 +156,13 @@ function QuizPage() {
     );
 }
 
+const OptimizationReport = ({optimizedCarbonFootprint}) => {
+
+    return (
+        <main className='flex flex-col w-full justify-center items-center'>
+            <h1 className='text-xl font-semibold tracking-wider text-primary'>Your optimized consumption now emmits :</h1>
+            <p className='text-xl font-semibold underline italic tracking-wider text-secondary'>{optimizedCarbonFootprint}</p>
+        </main>
+    )
+}
 export default QuizPage;
