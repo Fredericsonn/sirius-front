@@ -25,7 +25,11 @@ export default {
       'max-lg-2': {'max': '1094px'},
     }
   },
-  plugins: [require('@tailwindcss/typography'), require('daisyui')],
+  plugins: [
+    require('@tailwindcss/typography'), // Plugin Typography
+    require('@tailwindcss/forms'),      // Plugin Forms
+    require('daisyui'),                 // Plugin DaisyUI
+  ],
   daisyui: {
     themes: [
       "light",

@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PopupButtons = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleButtonClick = (action) => {
-    console.log(`Button clicked: ${action}`);
-    // Ajoutez ici la logique pour chaque bouton
+    if (action === "collection") {
+      navigate("/dashboard"); // Redirection vers le Dashboard
+    } else {
+      console.log(`Button clicked: ${action}`);
+    }
   };
 
   return (
     <div className="flex flex-col items-center">
-      {/* Bouton Start */}
       <button
         onClick={() => setIsOpen(true)}
         className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors mt-4"
@@ -18,29 +22,28 @@ const PopupButtons = () => {
         Start
       </button>
 
-      {/* Modal/Popup */}
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg p-6 w-80">
             <h2 className="text-xl font-bold mb-4 text-center">Sélectionnez une option</h2>
-            
+
             <div className="flex flex-col gap-3">
               <button
-                onClick={() => handleButtonClick('collection')}
+                onClick={() => handleButtonClick("collection")}
                 className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 Collection
               </button>
-              
+
               <button
-                onClick={() => handleButtonClick('consommation')}
+                onClick={() => handleButtonClick("consommation")}
                 className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 Consommation
               </button>
-              
+
               <button
-                onClick={() => handleButtonClick('machine')}
+                onClick={() => handleButtonClick("machine")}
                 className="w-full py-2 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 Machine
