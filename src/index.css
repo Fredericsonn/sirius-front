@@ -3,3 +3,22 @@
 @tailwind components;
 @tailwind utilities;
 
+<<<<<<< HEAD
+=======
+@layer components {
+    .container-layout {
+      @apply mx-auto max-w-6xl px-8;
+    }
+    .showBorder {
+      @apply border-4 border-red-700;
+    }
+    .sectionTitle {
+      @apply text-2xl font-semibold italic tracking-wide border-b-2 border-primary pb-[2px] mb-4 capitalize;
+    }
+
+    .truncated-text {
+      @apply whitespace-nowrap overflow-hidden text-ellipsis;
+    }
+
+}
+>>>>>>> 3aa184544ff5a491259109f97ea9275cb9ddae5a

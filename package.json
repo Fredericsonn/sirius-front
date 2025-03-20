@@ -10,7 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@headlessui/tailwindcss": "^0.2.1",
+=======
+    "@react-spring/web": "^9.7.5",
+>>>>>>> 3aa184544ff5a491259109f97ea9275cb9ddae5a
     "@reduxjs/toolkit": "^2.3.0",
     "@remixicon/react": "^4.6.0",
     "@tanstack/react-query": "^5.59.20",
@@ -19,30 +23,51 @@
     "axios": "^1.7.7",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
+<<<<<<< HEAD
     "front": "file:",
+=======
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.2",
+>>>>>>> 3aa184544ff5a491259109f97ea9275cb9ddae5a
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.3.0",
     "react-redux": "^9.1.2",
     "react-router-dom": "^6.26.1",
     "react-toastify": "^10.0.6",
+<<<<<<< HEAD
     "tailwind-merge": "^2.6.0",
     "tailwind-variants": "^0.3.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
     "@tailwindcss/forms": "^0.5.10",
+=======
+    "recharts": "^2.15.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+>>>>>>> 3aa184544ff5a491259109f97ea9275cb9ddae5a
     "@tailwindcss/typography": "^0.5.15",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.4.20",
+<<<<<<< HEAD
     "daisyui": "^4.12.23",
     "eslint": "^9.13.0",
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.11.0",
+=======
+    "daisyui": "^4.12.14",
+    "eslint": "^9.18.0",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "eslint-plugin-react-refresh": "^0.4.18",
+    "globals": "^15.14.0",
+>>>>>>> 3aa184544ff5a491259109f97ea9275cb9ddae5a
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "vite": "^5.4.10"
