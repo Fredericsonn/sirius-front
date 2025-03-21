@@ -16,6 +16,7 @@ import { action as collectionsAction } from "./pages/Collections";
 import ResourceWelcome from "./pages/Welcome2Resourec";
 
 import { store } from "./store";
+import Logs from "./components/Logs";
 
 const router = createBrowserRouter([
   {
@@ -74,7 +75,7 @@ const router = createBrowserRouter([
       },
       {
         path:'/resource/dashboard',
-        element:<Resources />,
+        element:<Logs />,
         errorElement: <ErrorElement />
       }
     ]
