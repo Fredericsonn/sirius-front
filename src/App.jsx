@@ -1,8 +1,7 @@
-
 import {createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources  } from "./pages";
-import { ErrorElement } from "./components";
+import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList  } from "./pages";
+import { ErrorElement, Logs } from "./components";
 
 // Loaders
 import { loader as catalogLoader } from "./pages/Catalog";
@@ -16,7 +15,6 @@ import { action as collectionsAction } from "./pages/Collections";
 import ResourceWelcome from "./pages/Welcome2Resourec";
 
 import { store } from "./store";
-import Logs from "./components/Logs";
 
 const router = createBrowserRouter([
   {
@@ -98,12 +96,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorElement />,
     action: loginAction(store)
   }
-])
-const App = () => {
+]);
 
-  return (
-    <RouterProvider router={router} />
-  )
+const App = () => {
+  return <RouterProvider router={router} />;
 };
 
-export default App
+export default App;
