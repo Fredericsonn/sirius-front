@@ -1,8 +1,7 @@
-
 import {createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources, QuizPage  } from "./pages";
-import { ErrorElement } from "./components";
+import { ErrorElement, Logs } from "./components";
 
 // Loaders
 import { loader as catalogLoader } from "./pages/Catalog";
@@ -83,7 +82,7 @@ const router = createBrowserRouter([
       },
       {
         path:'/resource/dashboard',
-        element:<Resources />,
+        element:<Logs />,
         errorElement: <ErrorElement />
       },
       {
@@ -107,12 +106,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorElement />,
     action: loginAction(store)
   }
-])
-const App = () => {
+]);
 
-  return (
-    <RouterProvider router={router} />
-  )
+const App = () => {
+  return <RouterProvider router={router} />;
 };
 
-export default App
+export default App;

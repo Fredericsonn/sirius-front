@@ -33,7 +33,11 @@ export default {
       'modal-pop': 'modal-pop 0.2s ease-out',
     },
   },
-  plugins: [require('@tailwindcss/typography'), require('daisyui')],
+  plugins: [
+    require('@tailwindcss/typography'), // Plugin Typography
+    require('@tailwindcss/forms'),      // Plugin Forms
+    require('daisyui'),                 // Plugin DaisyUI
+  ],
   daisyui: {
     themes: [
       "light", "dark", "cupcake", "bumblebee", "emerald",
