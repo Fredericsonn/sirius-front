@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 import { spring } from '../util';
 
-// Catégories des matériaux
 const categories = {
   "Métaux précieux": ["Or"],
   "Métaux de base": ["Cuivre", "Aluminium", "Nickel"],

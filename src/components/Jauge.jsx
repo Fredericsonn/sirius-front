@@ -61,9 +61,9 @@ const ImpactScoreCalculator = () => {
     }, []);
 
     const gaugeData = [
-        { name: 'Poor', value: 4.9, color: '#FF4D4D' },    // Red (0-4.9)
-        { name: 'Medium', value: 2.5, color: '#FFA500' },  // Orange (5-7.49)
-        { name: 'Good', value: 2.6, color: '#4CAF50' }     // Green (7.5-10)
+        { name: 'Poor', value: 4.9, color: '#FF4D4D' },    
+        { name: 'Medium', value: 2.5, color: '#FFA500' },  
+        { name: 'Good', value: 2.6, color: '#4CAF50' }     
     ];
 
     const cx = 200;
@@ -101,7 +101,6 @@ const ImpactScoreCalculator = () => {
         ];
     };
 
-    // Function to determine needle color and performance label based on score
     const getScoreInfo = (score) => {
         if (score >= 7.5) return { color: '#4CAF50', label: 'Good' };
         if (score >= 5) return { color: '#FFA500', label: 'Medium' };
