@@ -76,7 +76,7 @@ const ImpactScoreCalculator = () => {
         data.forEach((v) => {
             total += v.value;
         });
-        const ang = 180.0 * (1 - value / 10); // Dividing by 10 since our score is out of 10
+        const ang = 180.0 * (1 - value / 10); 
         const length = (iR + 2 * oR) / 3;
         const sin = Math.sin(-RADIAN * ang);
         const cos = Math.cos(-RADIAN * ang);
