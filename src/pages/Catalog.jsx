@@ -3,20 +3,28 @@ import { CatalogHeader, MachinesContainer } from "../components";
 import { spring } from "../util";
 import { useLoaderData } from "react-router-dom";
 
-export const loader = async () => {
-    const response = await spring.get('/machines');
-    const data = response.data;
-    const machines = data.vehicles.concat(data.devices);
-       
+const machinesQuery = () => ({
+    queryKey: ['machines'],
+    queryFn: async () => {
+        const response = await spring.get('/machines');
+        const data = response.data;
+        return data.vehicles.concat(data.devices);
+    },
+});
+
+
+export const loader = (queryClient) => async () => {
+    const machines = await queryClient.ensureQueryData(machinesQuery());
     return machines;
-}
+};
+
 
 export const CatalogContext = createContext();
 
-const Catalog = ({backup}) => {
+const Catalog = ({ backup }) => {
     const data = useLoaderData() ? useLoaderData() : backup;
     const [machines, setMachines] = useState(data);
-    
+
     return (
         <CatalogContext.Provider value={setMachines}>
             <main className="flex flex-col gap-6 relative">
