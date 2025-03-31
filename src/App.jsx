@@ -3,6 +3,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources, QuizPage } from "./pages";
 import { ErrorElement, Logs } from "./components";
 
+import ConsumptionLifestyleFeedback from './pages/ConsumptionLifestyleFeedback';
+
 // Loaders
 import { loader as catalogLoader } from "./pages/Catalog";
 import { loader as collectionsLoader } from "./pages/Collections";
@@ -62,6 +64,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
         loader: collectionLoader(store)
       },
+
       {
         path: '/tracer/consumptions',
         element: <Consumptions />,
@@ -73,7 +76,12 @@ const router = createBrowserRouter([
         element: <Consumption />,
         loader: consumptionLoader,
       },
-
+      {
+        path: '/tracer/consumptions/:consumptionId/feedback', 
+        element: <ConsumptionLifestyleFeedback />,
+        errorElement: <ErrorElement /> 
+      },
+     
       {
         path: '/profile',
         element: <Profile />,
