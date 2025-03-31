@@ -73,9 +73,9 @@ const LoginNav = () => {
 };
 
 const ThemeToggle = () => {
-    const [theme, setTheme] = useState('night');
+    const [theme, setTheme] = useState('dark');
     const handleTheme = () => {
-        const newTheme = theme === 'night' ? 'dark' : 'night';
+        const newTheme = theme === 'dark' ? 'night' : 'dark';
         document.documentElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
         setTheme(newTheme);

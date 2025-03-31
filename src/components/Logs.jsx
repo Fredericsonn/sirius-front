@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { spring } from '../util';
 
 const Logs = () => {
   const [collections, setCollections] = useState([]);
@@ -16,11 +16,6 @@ const Logs = () => {
   const [error, setError] = useState('');
   const [expandedMachines, setExpandedMachines] = useState([]);
 
-  const api = axios.create({
-    baseURL: 'http://localhost:8080',
-    headers: { 'Content-Type': 'application/json' }
-  });
-
   const toggleMachineDetails = (machineId) => {
     setExpandedMachines(prev => 
       prev.includes(machineId) 
@@ -32,7 +27,7 @@ const Logs = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await api.get('/users');
+        const response = await spring.get('/users');
         setUsers(response.data);
       } catch (err) {
         setError('Erreur de chargement des utilisateurs');
@@ -45,7 +40,7 @@ const Logs = () => {
     const fetchCollections = async () => {
       try {
         const params = selectedUserId ? { params: { user: selectedUserId } } : {};
-        const response = await api.get('/users/collections', params);
+        const response = await spring.get('/users/collections', params);
         setCollections(response.data);
         setSelectedCollectionId('');
       } catch (err) {
@@ -61,10 +56,10 @@ const Logs = () => {
 
       setLoading(true);
       try {
-        const impact = await api.get(`/api/collection/${selectedCollectionId}/impact`);
-        const recyclability = await api.get(`/api/collection/${selectedCollectionId}/recyclable`);
-        const score = await api.get(`/api/collection/${selectedCollectionId}/score`);
-        const machineResponse = await api.get(`/api/collection/${selectedCollectionId}/machines/details`);
+        const impact = await spring.get(`/api/collection/${selectedCollectionId}/impact`);
+        const recyclability = await spring.get(`/api/collection/${selectedCollectionId}/recyclable`);
+        const score = await spring.get(`/api/collection/${selectedCollectionId}/score`);
+        const machineResponse = await spring.get(`/api/collection/${selectedCollectionId}/machines/details`);
 
         setImpactData({
           impact: impact.data,
