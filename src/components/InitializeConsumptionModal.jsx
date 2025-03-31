@@ -104,12 +104,12 @@ const InitializeConsumptionModal = () => {
                     <section className='flex w-full justify-around mt-6 mb-6'>
                         <div className='flex flex-col items-center cursor-pointer hover:scale-110 duration-200'
                             onClick={() => document.getElementById('selectCollectionsModal').showModal()}>
-                            <img src="/images/list.png" alt="collection" className='w-32 h-32' />
+                            <img src="/images/list.png" alt="collection" className='w-32 h-32' loading='lazy' />
                             <p className='font-mono italic tracking-wide'>select from collections</p>
                         </div>
                         <div className='flex flex-col items-center cursor-pointer hover:scale-110 duration-200'
                             onClick={() => document.getElementById('selectMachinesModal').showModal()}>
-                            <img src="/images/catalog.png" alt="catalog" className='w-32 h-32' />
+                            <img src="/images/catalog.png" alt="catalog" className='w-32 h-32' loading='lazy' />
                             <p className='font-mono italic tracking-wide'>select from catalog</p>
                         </div>
                     </section>
@@ -126,14 +126,14 @@ const InitializeConsumptionModal = () => {
                             <>
                                 {name === '' && (
                                     <div className='flex justify-center items-center w-full gap-2 mt-2'>
-                                        <img src="/images/error.png" alt="error" className='w-6 h-6 object-contain' />
+                                        <img src="/images/error.png" alt="error" className='w-6 h-6 object-contain' loading='lazy' />
                                         <p className='font-semibold text-sm tracking-wider italic'>You must enter a name for your consumption</p>
                                     </div>
                                 )}
 
                                 {selectedMachines.length === 0 && (
                                     <div className='flex justify-center items-center w-full gap-2 mt-2'>
-                                        <img src="/images/error.png" alt="error" className='w-6 h-6 object-contain' />
+                                        <img src="/images/error.png" alt="error" className='w-6 h-6 object-contain' loading='lazy' />
                                         <p className='font-semibold text-sm tracking-wider italic'>You must select at least one machine for your consumption</p>
                                     </div>
                                 )}

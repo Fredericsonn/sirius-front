@@ -31,7 +31,7 @@ const Catalog = ({ backup }) => {
                 <CatalogHeader />
                 <MachinesContainer machines={machines} />
                 <button onClick={() => setMachines(data)} className='w-6 h-6 right-0 top-0 absolute hover:scale-150 duration-200'>
-                    <img src="/images/reset.png" alt="reset" />
+                    <img src="/images/reset.png" alt="reset" loading="lazy" />
                 </button>
             </main>
         </CatalogContext.Provider>
