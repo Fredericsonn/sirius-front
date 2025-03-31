@@ -55,6 +55,18 @@ const Consumptions = () => {
                   </td>
                   <td>
                     <Link to={'/tracer/consumptions/optimize/' + id } onClick={(e) => e.stopPropagation()} className='btn-secondary btn btn-sm'>optimize</Link>
+                    
+
+
+                  <Link
+                    to={`/tracer/consumptions/${id}/feedback`} 
+                    onClick={(e) => e.stopPropagation()} 
+                    className='btn btn-info btn-xs md:btn-sm'
+                    title="Provide Usage Feedback"
+                  >
+                    Feedback
+                  </Link>
+                  {}
                   </td>
                 </tr>
               )
