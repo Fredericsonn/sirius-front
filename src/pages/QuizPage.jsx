@@ -57,7 +57,6 @@ const QuizPage = () => {
 
   const handleSubmit = async () => {
     try {
-      // Save constraints
       const constraints = {};
       consumptionItems.forEach(item => {
         constraints[item.id] = parseFloat(answers[item.id]) || 0;
@@ -65,7 +64,6 @@ const QuizPage = () => {
       
       await spring.post(`/api/minimal/constraints/${consumptionId}`, constraints);
       
-      // Get optimization results
       const optimizeResponse = await spring.post(`/api/minimal/optimize/${consumptionId}`);
       setOptimizationResult(optimizeResponse.data);
       setIsOptimized(true);

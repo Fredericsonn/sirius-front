@@ -7,7 +7,6 @@ const OptimizationReport = ({
   initialAnswers, 
   savedCarbon 
 }) => {
-  // Calculate initial carbon footprint (sum of all initial frequencies)
   const initialCarbonFootprint = consumptionItems.reduce((sum, item) => {
     return sum + (initialAnswers[item.id] || 0);
   }, 0);
@@ -16,7 +15,7 @@ const OptimizationReport = ({
     <main className='flex flex-col items-center p-4 max-w-4xl mx-auto'>
       <h1 className='text-3xl font-bold text-primary mb-6'>Résultats de l'optimisation</h1>
 
-      {/* Carbon Footprint Summary */}
+      {}
       <div className='w-full bg-white rounded-lg shadow-md p-6 mb-8'>
         <h2 className='text-xl font-bold mb-4 text-gray-800'>Résumé de l'empreinte carbone</h2>
         
@@ -41,7 +40,6 @@ const OptimizationReport = ({
         </div>
       </div>
 
-      {/* Frequency Comparison Table */}
       <div className='w-full bg-white rounded-lg shadow-md p-6 mb-8'>
         <h2 className='text-xl font-bold mb-4 text-gray-800'>Détails par équipement</h2>
         
@@ -85,7 +83,6 @@ const OptimizationReport = ({
         </div>
       </div>
 
-      {/* Summary */}
       <div className='text-center p-6 bg-blue-50 rounded-lg w-full'>
         <h2 className='text-2xl font-bold text-blue-800 mb-2'>Résumé</h2>
         <p className='text-lg'>
