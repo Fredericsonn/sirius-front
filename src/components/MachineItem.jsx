@@ -19,8 +19,8 @@ const MachineItem = ({ img, nom, empreinteCarbone, quantite, urgence, categorie}
         <div className="flex-1">
           <h2 className="text-lg font-semibold">{nom}</h2>
           <p>Emitted Carbon : {intensiteCarbone} Kg CO₂</p>
-          <p>Urgency : {urgence}</p>
-          <p>Category : {categorie}</p>
+          {/* <p>Urgency : {urgence}</p>
+          <p>Category : {categorie}</p> */}
         </div>
 
       </div>

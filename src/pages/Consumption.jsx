@@ -1,20 +1,35 @@
 import React, { useEffect, useState } from 'react'
 import { spring } from '../util'
 import { useLoaderData } from 'react-router-dom';
-import {MachineList} from '../components';
+import { MachineList, MIR } from '../components';
 
 export const loader = async ({ params }) => {
     const response = await spring.get('/consumptions/' + params.id)
-    const consumption = response.data;
+    let consumption = response.data;
+
+    // Capitalize first letter of machine.type
+    consumption.items = consumption.items.map((item) => {
+        if (item.machine && item.machine.type) {
+            item.machine.type = item.machine.type.charAt(0).toUpperCase() + item.machine.type.slice(1);
+        }
+        return item;
+    });
+
+    delete consumption.consumptionItems;
 
     return consumption;
 }
+
 
 /* PS (Ayoub): The code in the useEffect was the loader of a page created by ismail, I merged the 2 pages into one so I turned the old page into a component
                 and I replaced the loader with a prop, which as you can I set as a sate varibale that gets set in the useEffect */
 const Consumption = () => {
     const consumption = useLoaderData();
     const [orderedItems, setOrderedItems] = useState([]);
+    const [mir, setMir] = useState({
+        score: 0,
+        report: []
+    });
 
     useEffect(() => {
         const getItems = async () => {
@@ -50,23 +65,50 @@ const Consumption = () => {
                     categorie: categorie,
                 };
             });
-            
+
             setOrderedItems(formattedMachines);
         }
 
         getItems();
     }, []);
 
+    useEffect(() => {
+        const fetchMIR = async () => {
+            const data = consumption;
+            
+            const response = await spring.post('/consumptions/mir', data);
+            const { score, report } = response.data;
+
+            setMir({
+                score,
+                report
+            });
+        }
+
+        fetchMIR();
+    }, [])
+
     return (
         <main className='flex flex-col w-full'>
-            <section className='flex flex-col justify-center items-center w-full'>
-                <h1 className='text-2xl'>Your consumptions produces:</h1>
+
+            <div className='flex flex-col w-full justify-center items-center'>
+                <h1 className='text-2xl'>Your consumptions produces daily:</h1>
                 <p className='font-bold text-2xl italic text-center text-secondary underline'>
-                    {consumption ? consumption.totalCarbonEmitted : 570} KgCO2</p>
-            </section>
-            <MachineList machines={orderedItems} />
+                    {consumption.totalCarbonEmitted.toFixed(2)} KgCO2</p>
+            </div>
+            <MIR consumption={consumption} />
+            <OrderedItems consumption={consumption} orderedItems={orderedItems} />
         </main>
     )
 }
 
+const OrderedItems = ({ consumption, orderedItems }) => {
+    return (
+        <>
+            <section className='flex flex-col justify-center items-center w-full'>
+            </section>
+            <MachineList machines={orderedItems} />
+        </>
+    )
+}
 export default Consumption;
