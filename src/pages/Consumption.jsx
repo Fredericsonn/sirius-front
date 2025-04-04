@@ -96,7 +96,7 @@ const Consumption = () => {
                 <p className='font-bold text-2xl italic text-center text-secondary underline'>
                     {consumption.totalCarbonEmitted.toFixed(2)} KgCO2</p>
             </div>
-            <MIR consumption={consumption} />
+            <MIR consumption={consumption} mir={mir} />
             <OrderedItems consumption={consumption} orderedItems={orderedItems} />
         </main>
     )
