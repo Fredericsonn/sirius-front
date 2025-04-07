@@ -186,7 +186,7 @@ const MachineParamsForm = ({ machine }) => {
                         ) : (
                             <div className='flex items-center w-36 gap-4'>
                                 <input type="number" name="usageDistance" value={formValues.usageDistance} placeholder='10'
-                                    className='input input-bordered text-sm w-24' min={0} max={24} defaultValue={0}
+                                    className='input input-bordered text-sm w-24' min={0} defaultValue={0}
                                     onChange={(e) => setFormValues({ ...formValues, usageDistance: e.target.value })} required />
                                 <p className='font-semibold tracking-wider'>kilometers</p>
                             </div>

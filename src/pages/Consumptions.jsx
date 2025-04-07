@@ -5,13 +5,23 @@ import { useLoaderData, useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { clearItems } from '../features/consumption/consumptionSlice';
 
-export const loader = (store) => async () => {
-  const userId = store.getState().userState.user.id;
-  const response = await spring.get('/consumptions', { params: { userId } });
-  const consumptions = response.data.consumptions;
+const consumptionsQuery = (userId) => ({
+  queryKey: ['consumptions', userId],
+  queryFn: async () => {
+    const response = await spring.get('/consumptions', {
+      params: { userId },
+    });
+    return response.data.consumptions;
+  },
+});
 
+
+export const loader = (queryClient, store) => async () => {
+  const userId = store.getState().userState.user.id;
+  const consumptions = await queryClient.ensureQueryData(consumptionsQuery(userId));
   return consumptions;
-}
+};
+
 
 const Consumptions = () => {
   const consumptions = useLoaderData();
@@ -55,6 +65,18 @@ const Consumptions = () => {
                   </td>
                   <td>
                     <Link to={'/tracer/consumptions/optimize/' + id } onClick={(e) => e.stopPropagation()} className='btn-secondary btn btn-sm'>optimize</Link>
+                    
+
+
+                  <Link
+                    to={`/tracer/consumptions/${id}/feedback`} 
+                    onClick={(e) => e.stopPropagation()} 
+                    className='btn btn-info btn-xs md:btn-sm'
+                    title="Provide Usage Feedback"
+                  >
+                    Feedback
+                  </Link>
+                  {}
                   </td>
                 </tr>
               )

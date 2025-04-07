@@ -20,13 +20,10 @@ const TableComponent = () => {
     fetchData();
   }, [user]);
   
-  // Fonction pour calculer la fréquence des composants
   const calculateFrequency = (data) => {
     const frequency = {};
     
-    // Parcourir toutes les machines
     data.forEach(machine => {
-      // Parcourir les ressources de chaque machine
       machine.resources.forEach(resource => {
         if (frequency[resource.name]) {
           frequency[resource.name]++;
@@ -36,7 +33,6 @@ const TableComponent = () => {
       });
     });
     
-    // Convertir en tableau pour l'affichage
     return Object.entries(frequency)
       .map(([name, count]) => ({ name, count }))
       .sort((a, b) => b.count - a.count);
