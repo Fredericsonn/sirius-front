@@ -20,4 +20,5 @@ export {default as MachineParamsInsertionModal} from "./MachineParamsInsertionMo
 export {default as CarbonReportMachine} from "./MachineParamsItem";
 export {default as MachineList} from "./MachineList";
 export {default as MIR} from "./MIR";
+export {default as Logs} from "./Logs";
 
