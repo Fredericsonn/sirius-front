@@ -3,7 +3,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources, QuizPage } from "./pages";
 import { ErrorElement, Logs } from "./components";
 
-import ConsumptionLifestyleFeedback from './pages/ConsumptionLifestyleFeedback';
 
 // Loaders
 import { loader as catalogLoader } from "./pages/Catalog";
@@ -77,11 +76,11 @@ const router = createBrowserRouter([
         loader: consumptionLoader,
         errorElement: <ErrorElement />
       },
-      {
-        path: '/tracer/consumptions/:consumptionId/feedback', 
-        element: <ConsumptionLifestyleFeedback />,
-        errorElement: <ErrorElement /> 
-      },
+      // {
+      //   path: '/tracer/consumptions/:consumptionId/feedback', 
+      //   element: <ConsumptionLifestyleFeedback />,
+      //   errorElement: <ErrorElement /> 
+      // },
      
       {
         path: '/profile',
