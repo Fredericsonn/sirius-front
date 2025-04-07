@@ -1,11 +1,9 @@
 import React from 'react';
 
 const OptimizationReport = ({ optimization }) => {
-    if (!optimization) return null;
-
     const {
         message,
-        optimizedItems = [],
+        optimizedItems,
         originalTotalCarbon,
         targetTotalCarbon,
         achievedTotalCarbon,
@@ -15,72 +13,74 @@ const OptimizationReport = ({ optimization }) => {
         solutionFound
     } = optimization;
 
+    console.log(optimizedItems);
+
     return (
         <div className='flex w-full justify-center'>
             <dialog id="optimizationReport" className="fixed inset-0 z-50 w-[75%] rounded-box bg-base-100 p-4 backdrop:bg-black/60 backdrop-blur-sm animate-modal-pop">
-                <div className='flex w-full justify-center'>
-                    <h3 className={`font-semibold tracking-widest italic text-lg mb-4 ${solutionFound ? 'text-green-600' : 'text-red-600'}`}>
-                        {message}
-                    </h3>
-                </div>
+                <div className='flex flex-col w-full justify-center'>
+                    <h3 className="font-semibold tracking-widest italic text-lg mb-4">{message}</h3>
+                    <div className='flex w-full justify-center items-center gap-10'>
+                        <p className='font-semibold tracking-widest italic text-lg mb-4'>original total footprint: </p>
+                        <p className="font-semibold tracking-widest italic text-lg mb-4 text-secondary">{originalTotalCarbon.toFixed(2)}</p>
+                    </div>
+                    <div className='flex w-full justify-center items-center gap-10'>
+                        <p className='font-semibold tracking-widest italic text-lg mb-4'>target footprint: </p>
+                        <p className="font-semibold tracking-widest italic text-lg mb-4 text-secondary">{targetTotalCarbon.toFixed(2)}</p>
+                    </div>
+                    <div className='flex w-full justify-center items-center gap-10'>
+                        <p className='font-semibold tracking-widest italic text-lg mb-4'>achieved footprint: </p>
+                        <p className="font-semibold tracking-widest italic text-lg mb-4 text-secondary">{achievedTotalCarbon.toFixed(2)}</p>
+                    </div>
+                    <div className='flex w-full justify-center items-center gap-10'>
+                        <p className='font-semibold tracking-widest italic text-lg mb-4'>original total cost: </p>
+                        <p className="font-semibold tracking-widest italic text-lg mb-4 text-secondary">{originalTotalCost.toFixed(2)}</p>
+                    </div>
+                    <div className='flex w-full justify-center items-center gap-10'>
+                        <p className='font-semibold tracking-widest italic text-lg mb-4'>target cost: </p>
+                        <p className="font-semibold tracking-widest italic text-lg mb-4 text-secondary">{targetMaxCost.toFixed(2)}</p>
+                    </div>
+                    <div className='flex w-full justify-center items-center gap-10'>
+                        <p className='font-semibold tracking-widest italic text-lg mb-4'>achieved cost: </p>
+                        <p className="font-semibold tracking-widest italic text-lg mb-4 text-secondary">{achievedTotalCarbon.toFixed(2)}</p>
+                    </div>
 
+                    {solutionFound && (
+                        <div className="overflow-x-auto p-4">
+                            <table className="table w-full table-zebra border border-gray-300">
+                                <thead className="text-sm uppercase">
+                                    <tr>
+                                        <th className="px-4 py-2 text-left">Item Name</th>
+                                        <th className="px-4 py-2 text-left">Original Frequency</th>
+                                        <th className="px-4 py-2 text-left">Optimized Frequency</th>
+                                        <th className="px-4 py-2 text-left">Energy Input</th>
+                                        <th className="px-4 py-2 text-left">New Footprint</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {optimizedItems.map((item, index) => (
+                                        <tr key={index}>
+                                            <td className="px-4 py-2">{item.itemName}</td>
+                                            <td className="px-4 py-2">{item.originalFrequency.toFixed(2)}</td>
+                                            <td className="px-4 py-2">{item.optimizedFrequency.toFixed(2)}</td>
+                                            <td className="px-4 py-2">{item.energyInput}</td>
+                                            <td className="px-4 py-2">{item.resultingCarbonFootprint.toFixed(2)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+
+                </div>
                 <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
                     onClick={() => {
                         document.getElementById('optimizationReport').close();
                     }}>✕
                 </button>
-
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-sm'>
-                    <div className='bg-base-200 p-4 rounded-box'>
-                        <h4 className='font-bold mb-2'>Carbon Footprint (kg CO₂e)</h4>
-                        <p><b>Original:</b> {originalTotalCarbon}</p>
-                        <p><b>Target:</b> {targetTotalCarbon}</p>
-                        <p><b>Achieved:</b> {achievedTotalCarbon}</p>
-                    </div>
-                    <div className='bg-base-200 p-4 rounded-box'>
-                        <h4 className='font-bold mb-2'>Cost (€)</h4>
-                        <p><b>Original:</b> {originalTotalCost.toFixed(2)}</p>
-                        <p><b>Budget (Max):</b> {targetMaxCost.toFixed(2)}</p>
-                        <p><b>Achieved:</b> {achievedTotalCost.toFixed(2)}</p>
-                    </div>
-                </div>
-
-                {optimizedItems.length > 0 && (
-                    <div className='overflow-x-auto mt-6'>
-                        <h4 className='text-md font-semibold mb-2'>Optimized Items</h4>
-                        <table className="table table-zebra table-sm w-full text-sm">
-                            <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Original Freq</th>
-                                    <th>Optimized Freq</th>
-                                    <th>Energy Input (W)</th>
-                                    <th>Resulting CO₂</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {optimizedItems.map((item, index) => (
-                                    <tr key={item.consumptionItemId || index}>
-                                        <td>{item.itemName}</td>
-                                        <td>{item.originalFrequency}</td>
-                                        <td>{item.optimizedFrequency.toFixed(3)}</td>
-                                        <td>{item.energyInput}</td>
-                                        <td>{item.resultingCarbonFootprint}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                )}
-
-                {optimizedItems.length === 0 && (
-                    <div className='mt-4 text-center text-warning'>
-                        No optimization data available.
-                    </div>
-                )}
             </dialog>
         </div>
-    );
-};
+    )
+}
 
 export default OptimizationReport;
