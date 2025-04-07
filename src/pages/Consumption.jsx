@@ -89,6 +89,9 @@ const Consumption = () => {
         fetchMIR();
     }, []);
 
+    console.log(mir.report);
+    
+
     return (
         <main className='flex flex-col w-full'>
 

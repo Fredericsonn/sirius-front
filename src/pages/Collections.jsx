@@ -7,8 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export const loader = (store) => async () => {
     const user = store.getState().userState.user;
-    console.log(user);
-    const response = await spring.get('/users/collections', {params: {userId: user.id}} );
+    const response = await spring.get('/api/collection', {params: {userId: user.id}} );
     const collections = response.data;
     return collections;
 }
