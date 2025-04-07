@@ -63,6 +63,7 @@ const router = createBrowserRouter([
         path: '/tracer/consumptions/:id',
         element: <Consumption />,
         loader: consumptionLoader,
+        errorElement: <ErrorElement />
       },
       {
         path: '/profile',

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
-const MachineItem = ({ img, nom, empreinteCarbone, quantite, urgence, categorie}) => {
+const MachineItem = ({ img, nom, empreinteCarbone, quantite, urgence, categorie, mir}) => {
+  console.log(mir);
+  
   const intensiteCarbone = (empreinteCarbone / quantite).toFixed(2);
 
   return (
@@ -18,7 +20,8 @@ const MachineItem = ({ img, nom, empreinteCarbone, quantite, urgence, categorie}
         {/* Description de la machine */}
         <div className="flex-1">
           <h2 className="text-lg font-semibold">{nom}</h2>
-          <p>Emitted Carbon : {intensiteCarbone} Kg CO₂</p>
+          <p>Daily Carbon Footprint : {intensiteCarbone} Kg CO₂</p>
+          <p>Manufacturing Footprint : {mir} Kg CO₂</p>
           {/* <p>Urgency : {urgence}</p>
           <p>Category : {categorie}</p> */}
         </div>

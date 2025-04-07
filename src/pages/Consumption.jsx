@@ -57,6 +57,7 @@ const Consumption = () => {
                 else if (intensiteCarbone <= 100) categorie = 'D';
 
                 return {
+                    id: item.machine.id,
                     img: item.machine.img,
                     nom: item.name || 'Nom non disponible', // Si "nom" n'existe pas
                     empreinteCarbone: item.carbonFootprint,
@@ -75,7 +76,7 @@ const Consumption = () => {
     useEffect(() => {
         const fetchMIR = async () => {
             const data = consumption;
-            
+
             const response = await spring.post('/consumptions/mir', data);
             const { score, report } = response.data;
 
@@ -86,7 +87,7 @@ const Consumption = () => {
         }
 
         fetchMIR();
-    }, [])
+    }, []);
 
     return (
         <main className='flex flex-col w-full'>
@@ -97,12 +98,25 @@ const Consumption = () => {
                     {consumption.totalCarbonEmitted.toFixed(2)} KgCO2</p>
             </div>
             <MIR consumption={consumption} mir={mir} />
-            <OrderedItems consumption={consumption} orderedItems={orderedItems} />
+            <OrderedItems consumption={consumption} orderedItems={orderedItems} report={mir.report} />
         </main>
     )
 }
 
-const OrderedItems = ({ consumption, orderedItems }) => {
+const OrderedItems = ({ consumption, orderedItems, report }) => {
+    const items = consumption.items;
+
+    const setMir = (machine) => {
+        const item = items.find((i) => i.machine.id == machine.id);
+        
+        return { ...machine, mir: report[item.id].toFixed(2) };
+    };
+
+    orderedItems = orderedItems.map(setMir);
+
+    console.log(report);
+    
+
     return (
         <>
             <section className='flex flex-col justify-center items-center w-full'>
