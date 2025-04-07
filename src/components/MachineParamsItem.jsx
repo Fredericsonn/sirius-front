@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react'
 
-const MachineParamsItem = ({ machine, selectMachine }) => {
-    const { img, name } = machine;
+const MachineParamsItem = ({ machine, selectMachine, size }) => {    
+    const { img, name, isSet } = machine;
     
     return (
-        <div className="card justify-center items-center w-36 bg-base-300 shadow-xl hover:shadow-2xl hover:scale-105 transition duration-300 cursor-pointer relative pt-6"
+        <div className={`card justify-center items-center ${size ? size : 'w-36'} bg-base-300 shadow-xl hover:shadow-2xl hover:scale-105 transition duration-300 cursor-pointer relative pt-6`}
              onClick={() => selectMachine(machine)}>
-            <div className="flex justify-center items-center w-24 h-24">
+            <div className={`flex justify-center items-center ${size ? 'w-20 h-20' : 'w-24 h-24'}`}>
                 <img src={img} alt={name} className="rounded-xl object-contain"></img>
             </div>
             <div className="card-body items-center text-center flex flex-col flex-grow min-h-[50px] px-5">

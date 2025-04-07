@@ -45,6 +45,7 @@ const Consumptions = () => {
               <th className='text-center'>name</th>
               <th className='text-center'>created at</th>
               <th className='text-center'>CO2 emitted</th>
+              <th></th>
             </tr>
             {consumptions.map((consumption) => {
               const { id, name, createdAt, totalCarbonEmitted } = consumption;
@@ -63,20 +64,9 @@ const Consumptions = () => {
                   <td className='text-center'>
                     {totalCarbonEmitted.toFixed(2)}
                   </td>
-                  <td>
-                    <Link to={'/tracer/consumptions/optimize/' + id } onClick={(e) => e.stopPropagation()} className='btn-secondary btn btn-sm'>optimize</Link>
-                    
-
-
-                  <Link
-                    to={`/tracer/consumptions/${id}/feedback`} 
-                    onClick={(e) => e.stopPropagation()} 
-                    className='btn btn-info btn-xs md:btn-sm'
-                    title="Provide Usage Feedback"
-                  >
-                    Feedback
-                  </Link>
-                  {}
+                  <td className='flex gap-2'>
+                    <Link to={'/tracer/consumptions/optimize/' + id } onClick={(e) => e.stopPropagation()} className='btn-secondary btn btn-sm text-sm'>simple optimization</Link>
+                    <Link to={'/tracer/consumptions/optimize/advanced/' + id } onClick={(e) => e.stopPropagation()} className='btn-accent btn btn-sm text-sm'>advanced optimization</Link>
                   </td>
                 </tr>
               )
