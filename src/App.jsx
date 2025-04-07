@@ -1,7 +1,8 @@
-import {createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { HomeLayout, Register, Error, Landing, Login, About, Tracer, Profile, Catalog, Collections, Collection, Consumptions, MachineList, Resources, QuizPage, AdvancedOptimization  } from "./pages";
 import { ErrorElement, Logs } from "./components";
+
 
 // Loaders
 import { loader as catalogLoader } from "./pages/Catalog";
@@ -16,7 +17,17 @@ import { action as loginAction } from "./pages/Login";
 import { action as collectionsAction } from "./pages/Collections";
 import ResourceWelcome from "./pages/Welcome2Resourec";
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import { store } from "./store";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+});
 
 const router = createBrowserRouter([
   {
@@ -52,16 +63,18 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
         loader: collectionLoader(store)
       },
+
       {
         path: '/tracer/consumptions',
         element: <Consumptions />,
         errorElement: <ErrorElement />,
-        loader: consumptionsLoader(store)
+        loader: consumptionsLoader(queryClient,store)
       },
       {
         path: '/tracer/consumptions/:id',
         element: <Consumption />,
         loader: consumptionLoader,
+        errorElement: <ErrorElement />
       },
      
       {
@@ -73,21 +86,21 @@ const router = createBrowserRouter([
         path: '/catalog',
         element: <Catalog />,
         errorElement: <ErrorElement />,
-        loader: catalogLoader
+        loader: catalogLoader(queryClient)
       },
       {
-        path:'/resource',
+        path: '/resource',
         element: <ResourceWelcome />,
         errorElement: <ErrorElement />
       },
       {
-        path:'/resource/dashboard',
-        element:<Logs />,
+        path: '/resource/dashboard',
+        element: <Logs />,
         errorElement: <ErrorElement />
       },
       {
-        path:'/tracer/consumptions/optimize/:consumptionId',
-        element:<QuizPage />,
+        path: '/tracer/consumptions/optimize/:consumptionId',
+        element: <QuizPage />,
         errorElement: <ErrorElement />
       },
       {
@@ -103,7 +116,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorElement />,
     action: registerAction
   },
-  
+
 
   {
     path: '/login',
@@ -114,7 +127,9 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return <QueryClientProvider client={queryClient}>
+    <RouterProvider router={router} />;
+  </QueryClientProvider>
 };
 
 export default App;

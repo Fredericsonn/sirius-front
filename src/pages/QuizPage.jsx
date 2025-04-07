@@ -15,9 +15,7 @@ const QuizPage = () => {
   const [quizStarted, setQuizStarted] = useState(false);
   const [name, setName] = useState('');
   const [isOptimized, setIsOptimized] = useState(false);
-  const [optimizedCarbonFootprint, setOptimizedCarbonFootprint] = useState(0);
-  const [optimizedFrequencies, setOptimizedFrequencies] = useState({});
-  const [savedCarbon, setSavedCarbon] = useState(0);
+  const [optimizationResult, setOptimizationResult] = useState(null);
 
   useEffect(() => {
     const fetchConsumptionData = async () => {
@@ -28,14 +26,15 @@ const QuizPage = () => {
           spring.get(`/consumptions/${consumptionId}`),
         ]);
 
-        setConsumptionItems(itemsResponse.data);
-        setAnswers(prevAnswers => {
-          const initialAnswers = { ...prevAnswers }; 
-          itemsResponse.data.forEach(item => {
-              initialAnswers[item.id] = item.usageFrequency;
-          });
-          return initialAnswers;
+        const items = itemsResponse.data;
+        setConsumptionItems(items);
+        
+        const initialAnswers = {};
+        items.forEach(item => {
+          initialAnswers[item.id] = item.usageFrequency;
         });
+        setAnswers(initialAnswers);
+        
         setName(consumptionResponse.data.name);
       } catch (err) {
         setError(err.message || 'Erreur lors de la récupération des données');
@@ -57,72 +56,47 @@ const QuizPage = () => {
   const handleStartQuiz = () => setQuizStarted(true);
 
   const handleSubmit = async () => {
-    if (!consumptionItems.every(item => answers[item.id] !== undefined && !isNaN(answers[item.id]))) {
-      alert('Veuillez répondre à toutes les questions.');
-      return;
-    }
-
-    const constraints = Object.fromEntries(
-      consumptionItems.map(item => [item.id, parseFloat(answers[item.id])])
-    );
-
     try {
-      const [constraintsResponse, optimizeResponse] = await Promise.all([
-        spring.post(`/api/minimal/constraints/${consumptionId}`, constraints),
-        spring.post(`/api/minimal/optimize/${consumptionId}`),
-      ]);
-
-      console.log('Réponse du serveur (constraints):', constraintsResponse.data);
-      console.log('Réponse du serveur (optimize):', optimizeResponse.data);
-
-      setOptimizedCarbonFootprint(optimizeResponse.data.optimizedCarbonFootprint);
-      setSavedCarbon(optimizeResponse.data.savedCarbon);
-      setOptimizedFrequencies(optimizeResponse.data.optimizedFrequencies);
+      const constraints = {};
+      consumptionItems.forEach(item => {
+        constraints[item.id] = parseFloat(answers[item.id]) || 0;
+      });
+      
+      await spring.post(`/api/minimal/constraints/${consumptionId}`, constraints);
+      
+      const optimizeResponse = await spring.post(`/api/minimal/optimize/${consumptionId}`);
+      setOptimizationResult(optimizeResponse.data);
       setIsOptimized(true);
     } catch (err) {
-      setError(err.response?.data || err.message || 'Erreur lors de la soumission des réponses');
-      console.error('Detailed error:', err.response);
+      setError(err.response?.data?.message || err.message || 'Erreur lors de la soumission des réponses');
+      console.error('Detailed error:', err);
     }
   };
 
-  const handlePrevious = () => setCurrentQuestionIndex(prevIndex => Math.max(0, prevIndex - 1));
-  const handleNext = () => setCurrentQuestionIndex(prevIndex => Math.min(consumptionItems.length - 1, prevIndex + 1));
-
-  if (loading) {
-    return <div className='flex justify-center items-center h-screen'>Chargement...</div>;
-  }
-
-  if (error) {
-    return <div className='flex justify-center items-center h-screen text-error'>Erreur : {error}</div>;
-  }
-
-  if (!quizStarted) {
-    return (
-      <div className='hero min-h-screen bg-base-200'>
-        <div className='hero-content text-center'>
-          <div className='max-w-md'>
-            <h1 className='text-5xl font-bold'>Optimisons votre consommation {name} !</h1>
-            <p className='py-6'>
-              Nous allons vous poser quelques questions rapides pour vous aider à réduire votre empreinte carbone.
-              Cela ne prendra que quelques minutes.
-            </p>
-            <button onClick={handleStartQuiz} className='btn btn-primary'>
-              C'est parti !
-            </button>
-          </div>
+  if (loading) return <div className='flex justify-center items-center h-screen'>Chargement...</div>;
+  if (error) return <div className='flex justify-center items-center h-screen text-error'>Erreur : {error}</div>;
+  if (!quizStarted) return (
+    <div className='hero min-h-screen bg-base-200'>
+      <div className='hero-content text-center'>
+        <div className='max-w-md'>
+          <h1 className='text-5xl font-bold'>Optimisons votre consommation {name} !</h1>
+          <p className='py-6'>
+            Nous allons vous poser quelques questions rapides pour vous aider à réduire votre empreinte carbone.
+          </p>
+          <button onClick={handleStartQuiz} className='btn btn-primary'>C'est parti !</button>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 
-  if (isOptimized) {
+  if (isOptimized && optimizationResult) {
     return (
       <OptimizationReport
-        optimizedCarbonFootprint={optimizedCarbonFootprint}
+        optimizedCarbonFootprint={optimizationResult.optimizedCarbonFootprint}
         consumptionItems={consumptionItems}
-        optimizedFrequencies={optimizedFrequencies}
+        optimizedFrequencies={optimizationResult.optimizedFrequencies}
         initialAnswers={answers}
-        savedCarbon={savedCarbon}
+        savedCarbon={optimizationResult.savedCarbon}
       />
     );
   }
@@ -141,12 +115,14 @@ const QuizPage = () => {
       )}
 
       <QuizNavigation
-        onPrevious={handlePrevious}
-        onNext={handleNext}
+        onPrevious={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
+        onNext={() => setCurrentQuestionIndex(prev => Math.min(consumptionItems.length - 1, prev + 1))}
         isFirstQuestion={currentQuestionIndex === 0}
         isLastQuestion={currentQuestionIndex === consumptionItems.length - 1}
         onSubmit={handleSubmit}
       />
-    </div>);};
+    </div>
+  );
+};
 
 export default QuizPage;
