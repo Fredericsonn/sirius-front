@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { spring } from '../util';
 import { useSelector } from 'react-redux';
-import OptimizationReport from '../pages/OptimizationReport';
+import {OptimizationReport} from '../components';
 
 const OptimizationModal = ({ consumptionId, carbonEmitted }) => {
 
@@ -37,15 +37,11 @@ const OptimizationModal = ({ consumptionId, carbonEmitted }) => {
             budgetT: goals.budget,
             carbonReductionPercentageCi: goals.emissionGoal / 100
         }
-
-        console.log(data);
         
         const response = await spring.post("/optimize/advanced", data)
         const optimization = response.data;
 
         setOptimization(optimization);
-
-        console.log(optimization);
         
         document.getElementById("optimizationReport").showModal();
 

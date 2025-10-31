@@ -16,4 +16,4 @@ export {default as Resources} from "./Resource";
 export {default as Consumption} from "./Consumption";
 export {default as QuizPage} from "./QuizPage";
 export {default as AdvancedOptimization} from "./AdvancedOptimization";
-export {default as OptimizationReport} from "./OptimizationReport";
+

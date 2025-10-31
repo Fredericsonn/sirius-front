@@ -5,8 +5,6 @@ import { ToastContainer } from 'react-toastify'
 
 import { Provider } from 'react-redux';
 import { store } from './store.js';
-import Logs from './components/Logs.jsx';
-
 
 createRoot(document.getElementById('root')).render(
     <Provider store={store}>

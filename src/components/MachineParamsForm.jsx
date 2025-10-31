@@ -158,7 +158,7 @@ const MachineParamsForm = ({ machine }) => {
                     <label className='flex items-center mt-6 w-full'>
                         <span className='font-semibold capitalize tracking-wider w-1/4'>energy input:</span>
                         <div className='flex items-center gap-4 flex-1'>
-                            <input type="number" step='any' name="energyInput" value={formValues.energyInput} className='input input-bordered' min={0} max={3000}
+                            <input type="number" step='any' name="energyInput" value={formValues.energyInput} className='input input-bordered' min={0}
                                 placeholder={energyDefaultValues[energyType]} onChange={(e) => setFormValues({ ...formValues, energyInput: e.target.value })} required />
                             <p className='font-semibold tracking-wider'>{units[energyType]}/h</p>
                         </div>
