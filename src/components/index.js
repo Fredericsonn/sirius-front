@@ -22,4 +22,5 @@ export {default as MachineList} from "./MachineList";
 export {default as MIR} from "./MIR";
 export {default as Logs} from "./Logs";
 export {default as OptimizationModal} from "./OptimizationModal";
+export {default as OptimizationReport} from "./OptimizationReport";
 

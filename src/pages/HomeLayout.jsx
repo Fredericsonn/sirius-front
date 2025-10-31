@@ -12,7 +12,7 @@ const HomeLayout = () => {
           <Outlet />
         </section>
     )}
-  </>;
-};
+  </>
+}
 
 export default HomeLayout;
