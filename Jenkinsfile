@@ -1,61 +1,88 @@
 pipeline {
     agent none
     environment {
-        REPO_URL = "https://github.com/Fredericsonn/sirius-front.git"
-        REMOTE_USER = "eco"
+        REPO_URL = 'https://github.com/Fredericsonn/sirius-front.git'
+        REMOTE_USER = 'eco'
     }
     stages {
+        stage('Load Secrets from Vault') {
+            agent any
+            steps {
+                script {
+                    withVault([
+                        vaultSecrets: [[
+                            path: "jenkins/frontend/${ENV}",
+                            secretValues: [
+                                [envVar: 'REMOTE_HOST',   vaultKey: 'REMOTE_HOST'],
+                                [envVar: 'REGISTRY_URL',  vaultKey: 'REGISTRY_URL'],
+                                [envVar: 'IMAGE_NAME',    vaultKey: 'IMAGE_NAME'],
+                                [envVar: 'BRANCH',        vaultKey: 'BRANCH'],
+                                [envVar: 'API',  vaultKey: 'API']
+                            ]
+                        ]]
+                    ]) {
+                        env.REMOTE_HOST  = REMOTE_HOST
+                        env.REGISTRY_URL = REGISTRY_URL
+                        env.IMAGE_NAME   = IMAGE_NAME
+                        env.BRANCH       = BRANCH
+                        env.API = API
+
+                        echo 'Secrets loaded and exported globally'
+                    }
+                }
+            }
+                }
         stage('Cloning the repository') {
-            agent { 
-                docker { 
-                    image 'ecotracer/front-agent' 
-                    args '--user root' 
-                } 
+            agent {
+                docker {
+                    image 'ecotracer/front-agent'
+                    args '--user root'
+                }
             }
             steps {
                 git branch: "${BRANCH}", url: "${env.REPO_URL}"
             }
         }
-        
-        stage("Build") {
-            agent { 
-                docker { 
-                    image 'ecotracer/front-agent' 
-                    args '--user root' 
-                } 
+
+        stage('Build') {
+            agent {
+                docker {
+                    image 'ecotracer/front-agent'
+                    args '--user root'
+                }
             }
             steps {
-                script {    
+                script {
                     sh '''
                         echo "VITE_API=${API}" > .env
                         rm -rf node_modules package-lock.json
                         npm cache clean --force
-                        npm install --no-optional 
+                        npm install --no-optional
                         npm install rollup --save-dev
-                        npm run build 
+                        npm run build
                     '''
                 }
             }
         }
-        
-        stage("Archive artifact") {
-            agent { 
-                docker { 
-                    image 'ecotracer/front-agent' 
-                    args '--user root' 
-                } 
-            }   
+
+        stage('Archive artifact') {
+            agent {
+                docker {
+                    image 'ecotracer/front-agent'
+                    args '--user root'
+                }
+            }
             steps {
-                archiveArtifacts artifacts: "dist,Dockerfile", allowEmptyArchive: false
+                archiveArtifacts artifacts: 'dist,Dockerfile', allowEmptyArchive: false
             }
         }
-        
-        stage("Building Docker Image") {
-            agent { 
-                docker { 
-                    image 'ecotracer/dind' 
-                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""' 
-                } 
+
+        stage('Building Docker Image') {
+            agent {
+                docker {
+                    image 'ecotracer/dind'
+                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""'
+                }
             }
             steps {
                 script {
@@ -64,12 +91,12 @@ pipeline {
             }
         }
 
-        stage("Pushing Image to the registry") {
-            agent { 
-                docker { 
-                    image 'ecotracer/dind' 
-                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""' 
-                } 
+        stage('Pushing Image to the registry') {
+            agent {
+                docker {
+                    image 'ecotracer/dind'
+                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""'
+                }
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'registry', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -80,16 +107,16 @@ pipeline {
                 }
             }
         }
-        
-        stage("Deploy to the front server") {
-            agent { 
-                docker { 
-                    image 'ecotracer/dind' 
-                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""' 
-                } 
+
+        stage('Deploy to the front server') {
+            agent {
+                docker {
+                    image 'ecotracer/dind'
+                    args '--user root --restart always -v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""'
+                }
             }
             steps {
-                sshagent(['creds']) { 
+                sshagent(['creds']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker stop frontend || true && docker rm frontend || true"
                         ssh -o StrictHostKeyChecking=no "${env.REMOTE_USER}"@"${env.REMOTE_HOST}" "docker rmi -f ${REGISTRY_URL}/${IMAGE_NAME} && docker run -d --name frontend --network host -e API=${API} ${REGISTRY_URL}/${IMAGE_NAME}"
@@ -98,7 +125,7 @@ pipeline {
             }
         }
     }
-    
+
     post {
         success {
             echo 'Deployment completed successfully!'
